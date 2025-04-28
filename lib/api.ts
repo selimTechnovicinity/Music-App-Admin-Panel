@@ -1,0 +1,218 @@
+import { TResetPasswordData } from "@/app/(auth)/forgot-password/verify/reset-password/page";
+import { TDateRange } from "@/app/(withCommonLayout)/bookings/page";
+import { FAQData } from "@/app/(withCommonLayout)/faq/create/page";
+import { UpdateFAQData } from "@/app/(withCommonLayout)/faq/edit/[id]/page";
+import { PrivacyData } from "@/app/(withCommonLayout)/privacy/page";
+import { TUpdatePasswordData } from "@/app/(withCommonLayout)/update-password/page";
+import { TUpdateData } from "@/app/(withCommonLayout)/update-profile/page";
+import { TRegisterData } from "@/app/(withCommonLayout)/users/create/page";
+import API from "./axios-client";
+
+type forgotPasswordType = { email: string };
+type resetPasswordType = { password: string; verificationCode: string };
+
+type LoginType = {
+  email: string;
+  password: string;
+};
+
+type registerType = {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+type verifyEmailType = { code: string };
+
+export const loginMutationFn = async (data: LoginType) =>
+  await API.post("/auth/login", data);
+
+export const registerMutationFn = async (data: registerType) =>
+  await API.post(`/auth/register`, data);
+
+export const verifyEmailMutationFn = async (data: verifyEmailType) =>
+  await API.post(`/auth/verify/email`, data);
+
+export const forgotPasswordMutationFn = async (data: forgotPasswordType) =>
+  await API.post(`/auth/password/forgot`, data);
+
+export const resetPasswordMutationFn = async (data: resetPasswordType) =>
+  await API.post(`/auth/password/reset`, data);
+
+export const logoutMutationFn = async () => await API.post(`/auth/logout`);
+
+// new
+
+export const getAllBookings = async (
+  sortBy: string,
+  pageNo: number,
+  limit: number,
+  dateRange: TDateRange
+) => {
+  const res = await API.get(
+    `/reservations?sortBy=${sortBy}&page=${pageNo}&limit=${limit}&st=${dateRange.startDate}&en=${dateRange.endDate}`
+  );
+  return res.data;
+};
+
+export const updateUser = async (formData: TUpdateData) => {
+  const res = await API.patch(`/users`, formData);
+
+  const userInfo = await res.data;
+
+  return userInfo;
+};
+export const updatePassword = async (formData: TUpdatePasswordData) => {
+  const res = await API.patch(`/auth/update-password`, formData);
+  const result = await res.data;
+  return result;
+};
+
+export const getUserById = async (id: string) => {
+  const res = await API.get(`/users/${id}`);
+  const user = await res.data;
+  return user;
+};
+
+export const getAllUsers = async (
+  role?: string,
+  pageNo?: number,
+  limit?: number
+) => {
+  const params = new URLSearchParams();
+  if (role) params.append("role", role);
+  if (pageNo !== undefined) params.append("page", String(pageNo));
+  if (limit !== undefined) params.append("limit", String(limit));
+
+  const queryString = params.toString();
+
+  const res = await API.get(`/users${queryString ? "?" + queryString : ""}`);
+  const users = res.data;
+  return users;
+};
+
+export const restoreUser = async (id: { id: string }) => {
+  const res = await API.patch(`/users/restore`, id);
+  return res.data;
+};
+
+export const disableUser = async (id: { id: string }) => {
+  const res = await API.delete(`/users`, { data: id });
+
+  const userInfo = await res.data;
+  return userInfo;
+};
+
+export const userRegister = async (formData: TRegisterData) => {
+  const res = await API.post(`/auth/register`, formData);
+  const userInfo = await res.data;
+  return userInfo;
+};
+
+export const updateUserById = async (id: string, formData: TUpdateData) => {
+  const res = await API.patch(`/users/${id}`, formData);
+  const result = await res.data;
+  return result;
+};
+
+export const createPrivacy = async (privacyData: PrivacyData) => {
+  const res = await API.post(`/additionals/privacy_policy`, privacyData);
+  const result = await res.data;
+  return result;
+};
+
+export const createTerms = async (privacyData: PrivacyData) => {
+  const res = await API.post(`/additionals/terms_conditions`, privacyData);
+  const result = await res.data;
+  return result;
+};
+
+export const createFAQ = async (updatedFaqData: FAQData) => {
+  const res = await API.post(`/additionals/faq`, updatedFaqData);
+  const result = await res.data;
+  return result;
+};
+
+export const updateFAQById = async (id: string, faqData: UpdateFAQData) => {
+  const res = await API.patch(`/additionals/faq/${id}`, faqData);
+  const result = await res.data;
+  return result;
+};
+
+export const getPrivacy = async () => {
+  const res = await API.get(`/additionals/privacy_policy`);
+  const result = await res.data;
+  return result;
+};
+
+export const getTerms = async () => {
+  const res = await API.get(`/additionals/terms_conditions`);
+  const result = await res.data;
+  return result;
+};
+
+export const getFAQ = async () => {
+  const res = await API.get(`/additionals/faq`);
+  const result = await res.data;
+  return result;
+};
+
+export const getPrivacyById = async (id: string) => {
+  const res = await API.get(`/additionals/privacy_policy/${id}`);
+  const result = await res.data;
+  return result;
+};
+
+export const getTermsById = async (id: string) => {
+  const res = await API.get(`/additionals/terms_conditions/${id}`);
+  const result = await res.data;
+  return result;
+};
+
+export const getFAQById = async (id: string) => {
+  const res = await API.get(`/additionals/faq/${id}`);
+  const result = await res.data;
+  return result;
+};
+
+export const deleteFAQById = async (id: string) => {
+  const res = await API.delete(`/additionals/faq/${id}`);
+  const result = await res.data;
+  return result;
+};
+
+export const getContacts = async () => {
+  const res = await API.get(`/contacts`);
+  const result = await res.data;
+  return result;
+};
+
+export const getContactsById = async (id: string) => {
+  const res = await API.get(`/contacts/${id}`);
+  const result = await res.data;
+  return result;
+};
+
+//forgot password
+
+export const forgetPassword = async (email: { email: string }) => {
+  const res = await API.post(`/auth/forget-password`, email);
+
+  const result = await res.data;
+  return result;
+};
+
+export const submitOTP = async (otpData: { otp: string }) => {
+  const res = await API.post(`/auth/reset-password/verify`, otpData);
+
+  const result = await res.data;
+  return result;
+};
+
+export const resetPassword = async (formData: TResetPasswordData) => {
+  const res = await API.post(`/auth/reset-password`, formData);
+  const result = await res.data;
+
+  return result;
+};
