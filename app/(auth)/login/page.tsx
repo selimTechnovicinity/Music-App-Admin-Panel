@@ -21,12 +21,8 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: loginMutationFn,
     onSuccess: (res) => {
-      if (res?.data.status === "success") {
-        toast.success("Login successful.");
-        router.push("/update-profile");
-      } else {
-        toast.error(res?.data.message || "Failed to login.");
-      }
+      toast.success(res.data.message);
+      router.push("/users");
     },
     onError: (error: any) => {
       toast.error(

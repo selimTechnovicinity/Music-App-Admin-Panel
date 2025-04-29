@@ -24,97 +24,16 @@ const Users = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const limit = 9;
 
-  const user = [
-    {
-      id: "1",
-      name: "John Doe",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "2",
-      name: "Jane Doe",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "3",
-      name: "John Smith",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "4",
-      name: "Jane Smith",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "3",
-      name: "John Smith",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "4",
-      name: "Jane Smith",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "3",
-      name: "John Smith",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "4",
-      name: "Jane Smith",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "5",
-      name: "John Doe",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "6",
-      name: "Jane Doe",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "7",
-      name: "John Smith",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "8",
-      name: "Jane Smith",
-      email: "",
-      role: "user",
-    },
-    {
-      id: "9",
-      name: "John Doe",
-      email: "",
-      role: "user",
-    },
-  ];
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const res = await getAllUsers("user", pageNo, limit);
-        const usersData = res?.data?.users?.users;
-        const totalUsers = res?.data?.users?.totalUsers;
+        const res = await getAllUsers(pageNo, limit);
+        const usersData = res?.data;
+        const totalPages = res?.totalPages;
 
         setUsers(usersData || []);
-        setTotalPages(Math.ceil(totalUsers / limit));
+        setTotalPages(totalPages);
       } catch {
         setError("No users found. Please add a user.");
       } finally {
@@ -149,7 +68,6 @@ const Users = () => {
 
     return pages;
   };
-
 
   return (
     <main className="my-10 mx-auto w-full max-w-6xl px-4">

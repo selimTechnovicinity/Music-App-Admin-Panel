@@ -1,34 +1,37 @@
 "use client";
-import { toast } from "@/hooks/use-toast";
-import { forgetPassword } from "@/lib/api";
+
+import API from "@/lib/axios-client";
 import { setLocalStorage } from "@/utils/local-storage";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const router = useRouter();
 
-  const handleReset = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const res = await forgetPassword({ email });
-      if (res?.success === false) {
-        toast({ title: res?.message });
-      } else if (res?.status === "success") {
-        toast({ title: res?.message });
+  const forgotPasswordMutation = useMutation({
+    mutationFn: () => API.post("/auth/forget-password", { email }),
+    onSuccess: (res) => {
+      if (res?.data.success) {  
         setLocalStorage("email", email);
         router.push("/forgot-password/verify");
       }
-    } catch (error) {
-      toast({ title: error as string });
-    } finally {
-      setLoading(false);
-    }
+    },
+    onError: (error) => {
+      const err = error as AxiosError<{ message?: string }>;
+      console.log(err?.response?.data?.message);
+      setError(err?.response?.data?.message || "Something went wrong.");
+    },
+  });
+
+  const handleReset = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    forgotPasswordMutation.mutate();
   };
 
   return (
@@ -40,21 +43,30 @@ const ForgotPassword = () => {
         <form className="mt-4" onSubmit={handleReset}>
           <input
             type="email"
+            required
             placeholder="Enter your email"
-            className="w-full p-2 mt-2 border dark:border-none rounded-md dark:bg-gray-700 dark:text-white dark:border-gray-600"
+            className={`w-full p-2 mt-2 border rounded-md dark:bg-gray-700 dark:text-white ${
+              error
+                ? "border-red-500 dark:border-red-500"
+                : "border-gray-300 dark:border-gray-600"
+            }`}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
           <button
-            disabled={loading}
-            className={`w-full p-2 mt-4 bg-blue-950 text-white rounded-md cursor-pointer flex items-center justify-center transition ${
-              loading ? "opacity-75 cursor-not-allowed" : "hover:bg-blue-800"
+            type="submit"
+            disabled={forgotPasswordMutation.isPending}
+            className={`w-full p-2 mt-4 bg-blue-950 text-white rounded-md flex items-center justify-center transition ${
+              forgotPasswordMutation.isPending
+                ? "opacity-75 cursor-not-allowed"
+                : "hover:bg-blue-800"
             }`}
           >
-            {loading ? (
+            {forgotPasswordMutation.isPending ? (
               <>
                 <Loader2 className="animate-spin mr-2" size={20} />
-                Submiting...
+                Submitting...
               </>
             ) : (
               "Submit"

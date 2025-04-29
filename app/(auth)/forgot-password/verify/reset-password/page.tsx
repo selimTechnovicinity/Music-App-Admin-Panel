@@ -7,16 +7,16 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export type TResetPasswordData = {
-  otp: string;
+  email: string;
   password: string;
   confirmPassword: string;
 };
 
 const ForgotPassword = () => {
   const router = useRouter();
-  const otp = getLocalStorage("OTP");
+  const email = getLocalStorage("email");
   const [formData, setFormData] = useState<TResetPasswordData>({
-    otp: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -41,17 +41,14 @@ const ForgotPassword = () => {
 
     setError("");
     try {
-      if (!otp) {
-        toast.error("OTP not found. Please request a new one.");
+      if (!email) {
+        toast.error("Email not found. Please request a new one.");
         router.push("/forgot-password");
       }
-      formData.otp = otp as string;
+      formData.email = email as string;
       const res = await resetPassword(formData);
-
-      if (res?.success === false) {
-        toast.error(res?.message);
-        router.push("/forgot-password");
-      } else {
+      console.log(res);
+      if (res?.success) {
         toast.success(res?.message);
         router.push("/login");
       }

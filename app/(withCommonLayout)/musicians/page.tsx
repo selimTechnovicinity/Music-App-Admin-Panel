@@ -2,7 +2,7 @@
 
 import Loading from "@/app/loading";
 import { getAllUsers } from "@/lib/api";
-import RestaurantTable from "@/ui/Users/RestaurantTable";
+import UsersTable from "@/ui/Users/UsersTable";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -11,7 +11,7 @@ export type TUser = {
   name: string;
   email: string;
   phone: string;
-  role: "operator" | "restaurant" | "super-admin";
+  role: "user" | "musician" | "admin";
   isActive: boolean;
   __v: number;
 };
@@ -27,12 +27,12 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const res = await getAllUsers("restaurant", pageNo, limit);
-        const usersData = res?.data?.users?.users;
-        const totalUsers = res?.data?.users?.totalUsers;
+        const res = await getAllUsers(pageNo, limit);
+        const usersData = res?.data;
+        const totalPages = res?.totalPages;
 
         setUsers(usersData || []);
-        setTotalPages(Math.ceil(totalUsers / limit));
+        setTotalPages(totalPages);
       } catch {
         setError("Musicians data not found");
       } finally {
@@ -67,7 +67,6 @@ const Users = () => {
     return pages;
   };
 
-
   return (
     <main className="my-10 mx-auto w-full max-w-6xl px-4">
       <div className="flex justify-end mr-5">
@@ -84,7 +83,7 @@ const Users = () => {
       ) : (
         <div>
           {loading && <Loading />}
-          <RestaurantTable users={users} />
+          <UsersTable users={users} />
 
           {/* Pagination */}
           <div className="left-0 w-full flex justify-center gap-2">

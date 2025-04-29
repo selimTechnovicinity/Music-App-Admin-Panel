@@ -1,5 +1,4 @@
 import { TResetPasswordData } from "@/app/(auth)/forgot-password/verify/reset-password/page";
-import { TDateRange } from "@/app/(withCommonLayout)/bookings/page";
 import { FAQData } from "@/app/(withCommonLayout)/faq/create/page";
 import { UpdateFAQData } from "@/app/(withCommonLayout)/faq/edit/[id]/page";
 import { PrivacyData } from "@/app/(withCommonLayout)/privacy/page";
@@ -42,19 +41,9 @@ export const resetPasswordMutationFn = async (data: resetPasswordType) =>
 
 export const logoutMutationFn = async () => await API.post(`/auth/logout`);
 
-// new
+// Song
 
-export const getAllBookings = async (
-  sortBy: string,
-  pageNo: number,
-  limit: number,
-  dateRange: TDateRange
-) => {
-  const res = await API.get(
-    `/reservations?sortBy=${sortBy}&page=${pageNo}&limit=${limit}&st=${dateRange.startDate}&en=${dateRange.endDate}`
-  );
-  return res.data;
-};
+export const getSongFormats = async () => await API.get("/song_formats");
 
 export const updateUser = async (formData: TUpdateData) => {
   const res = await API.patch(`/users`, formData);
@@ -75,13 +64,8 @@ export const getUserById = async (id: string) => {
   return user;
 };
 
-export const getAllUsers = async (
-  role?: string,
-  pageNo?: number,
-  limit?: number
-) => {
+export const getAllUsers = async (pageNo?: number, limit?: number) => {
   const params = new URLSearchParams();
-  if (role) params.append("role", role);
   if (pageNo !== undefined) params.append("page", String(pageNo));
   if (limit !== undefined) params.append("limit", String(limit));
 
@@ -203,8 +187,8 @@ export const forgetPassword = async (email: { email: string }) => {
   return result;
 };
 
-export const submitOTP = async (otpData: { otp: string }) => {
-  const res = await API.post(`/auth/reset-password/verify`, otpData);
+export const submitOTP = async (otpData: { otp: string; email: string }) => {
+  const res = await API.post(`/auth/forget-password/verify-otp`, otpData);
 
   const result = await res.data;
   return result;

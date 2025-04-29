@@ -2,14 +2,13 @@
 
 import { Card, CardContent } from "@/ui/Card";
 import {
-  Album,
-  Clock,
   DollarSign,
   Download,
   Headphones,
   Mic2,
   Music,
   Radio,
+  Store,
   TrendingUp,
   User,
   Wallet,
@@ -26,15 +25,6 @@ import {
   YAxis,
 } from "recharts";
 
-const usersData = [
-  { day: "Mon", users: 120 },
-  { day: "Tue", users: 200 },
-  { day: "Wed", users: 150 },
-  { day: "Thu", users: 220 },
-  { day: "Fri", users: 300 },
-  { day: "Sat", users: 450 },
-  { day: "Sun", users: 380 },
-];
 
 const revenueData = [
   { month: "Jan", revenue: 4000 },
@@ -94,18 +84,18 @@ export default function Dashboard() {
           title="Total Artists"
           value="1,240"
           change="+5%"
-          icon={<Mic2 className="h-6 w-6 text-purple-500" />}
+          icon={<Mic2 className="h-6 w-6 text-blue-500" />}
         />
         <SummaryCard
           title="Songs Uploaded"
           value="32,450"
           change="+8%"
-          icon={<Music className="h-6 w-6 text-green-500" />}
+          icon={<Music className="h-6 w-6 text-blue-500" />}
         />
         <SummaryCard
           title="Total Music Albums"
           value="$12,500"
-          icon={<Wallet className="h-6 w-6 text-amber-500" />}
+          icon={<Wallet className="h-6 w-6 text-blue-500" />}
         />
       </div>
 
@@ -117,39 +107,40 @@ export default function Dashboard() {
           icon={<Radio className="h-6 w-6 text-red-500" />}
         />
         <SummaryCard
-          title="Pending Withdrawals"
-          value="$12,500"
-          icon={<Wallet className="h-6 w-6 text-amber-500" />}
+          title="Total Orders"
+          value="8,420"
+          icon={<Store className="h-6 w-6 text-green-500" />}
         />
-        <SummaryCard
-          title="Total Donation Received"
-          value="32 mins"
-          icon={<Clock className="h-6 w-6 text-indigo-500" />}
-        />
+
         <SummaryCard
           title="New Releases"
           value="1,245"
-          icon={<Album className="h-6 w-6 text-pink-500" />}
+          icon={<Music className="h-6 w-6 text-green-500" />}
+        />
+        <SummaryCard
+          title="Total Donation Received"
+          value="$12,500"
+          icon={<DollarSign className="h-6 w-6 text-green-500" />}
         />
       </div>
       {/* Third Row */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <SummaryCard
-          title="Total Orders"
-          value="8,420"
-          icon={<Radio className="h-6 w-6 text-red-500" />}
+          title="Pending Withdrawals"
+          value="$12,500"
+          icon={<DollarSign className="h-6 w-6 text-red-500" />}
         />
 
         <SummaryCard
           title="Total Payment Received for Orders"
-          value="32 mins"
-          icon={<Clock className="h-6 w-6 text-indigo-500" />}
+          value="$12,500"
+          icon={<DollarSign className="h-6 w-6 text-green-500" />}
         />
 
         <SummaryCard
           title="Total Payment Received for Music"
-          value="1,245"
-          icon={<Album className="h-6 w-6 text-pink-500" />}
+          value="$12,500"
+          icon={<DollarSign className="h-6 w-6 text-green-500" />}
         />
         <SummaryCard
           title="Total Revenue"
