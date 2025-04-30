@@ -47,7 +47,6 @@ const ForgotPassword = () => {
       }
       formData.email = email as string;
       const res = await resetPassword(formData);
-      console.log(res);
       if (res?.success) {
         toast.success(res?.message);
         router.push("/login");

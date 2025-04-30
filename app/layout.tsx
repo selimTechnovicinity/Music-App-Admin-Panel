@@ -1,8 +1,9 @@
-import { Toaster } from "@/components/ui/toaster";
+
 import QueryProvider from "@/context/query-provider";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const dm_sans = DM_Sans({ subsets: ["latin"] });
 
@@ -20,8 +21,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`bg-background ${dm_sans.className} antialiased`}>
         <QueryProvider>
+        <Toaster position="top-center" />
           {children}
-          <Toaster />
         </QueryProvider>
       </body>
     </html>

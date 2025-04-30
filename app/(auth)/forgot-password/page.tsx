@@ -23,7 +23,6 @@ const ForgotPassword = () => {
     },
     onError: (error) => {
       const err = error as AxiosError<{ message?: string }>;
-      console.log(err?.response?.data?.message);
       setError(err?.response?.data?.message || "Something went wrong.");
     },
   });

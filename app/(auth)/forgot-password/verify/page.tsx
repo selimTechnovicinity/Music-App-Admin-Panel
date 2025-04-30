@@ -37,7 +37,6 @@ const SubmitOTP = () => {
       }),
     onSuccess: (res) => {
       if (res?.data.success) {
-        console.log("ss", res);
         toast.success(res.data.message);
         setLocalStorage("OTP", otp);
         router.push("/forgot-password/verify/reset-password");
@@ -45,7 +44,6 @@ const SubmitOTP = () => {
     },
     onError: (error) => {
       const err = error as AxiosError<{ message?: string }>;
-      console.log("err", err);
       setError(err?.response?.data?.message || "An unexpected error occurred.");
     },
   });
