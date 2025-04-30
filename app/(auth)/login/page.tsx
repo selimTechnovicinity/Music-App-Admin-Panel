@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { loginMutationFn } from "@/lib/api";
 import { useMutation } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -21,8 +22,10 @@ const Login = () => {
   const mutation = useMutation({
     mutationFn: loginMutationFn,
     onSuccess: (res) => {
+      Cookies.set("accessToken", res?.data?.data.accessToken);
+      Cookies.set("refreshToken", res?.data?.data?.refreshToken);
       toast.success(res.data.message);
-      router.push("/users");
+      router.push("/dashboard");
     },
     onError: (error: any) => {
       toast.error(

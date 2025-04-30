@@ -25,7 +25,6 @@ import {
   YAxis,
 } from "recharts";
 
-
 const revenueData = [
   { month: "Jan", revenue: 4000 },
   { month: "Feb", revenue: 3000 },
@@ -73,7 +72,7 @@ export default function Dashboard() {
   return (
     <div className="p-6 space-y-6 bg-gray-100">
       {/* Top Summary Cards - Expanded */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <SummaryCard
           title="Total Users"
           value="24,850"
@@ -100,7 +99,7 @@ export default function Dashboard() {
       </div>
 
       {/* Second Row Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <SummaryCard
           title="Active Subscriptions"
           value="8,420"
@@ -124,7 +123,7 @@ export default function Dashboard() {
         />
       </div>
       {/* Third Row */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <SummaryCard
           title="Pending Withdrawals"
           value="$12,500"

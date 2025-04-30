@@ -4,23 +4,33 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
-import { BsEnvelopeOpenHeart } from "react-icons/bs";
+import { BsEnvelopeOpenHeart, BsPostcardFill } from "react-icons/bs";
 import { CiTextAlignJustify } from "react-icons/ci";
 import {
   FaClipboardList,
   FaHeadphonesAlt,
   FaMicrophoneAlt,
+  FaPercent,
 } from "react-icons/fa";
-import { FaClipboardQuestion } from "react-icons/fa6";
+import { FaCircleDollarToSlot, FaClipboardQuestion } from "react-icons/fa6";
 import { FiMenu, FiUser } from "react-icons/fi";
 import { GiMusicalNotes } from "react-icons/gi";
+import { GrTransaction } from "react-icons/gr";
+import { IoSettings } from "react-icons/io5";
 import {
   MdOutlineLanguage,
   MdOutlineLibraryMusic,
   MdPrivacyTip,
 } from "react-icons/md";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-import { TbEdit, TbMusicCode, TbPasswordUser } from "react-icons/tb";
+import { SiProducthunt } from "react-icons/si";
+import {
+  TbEdit,
+  TbMusicCode,
+  TbMusicDollar,
+  TbMusicPlus,
+  TbPasswordUser,
+} from "react-icons/tb";
 import { toast } from "sonner";
 
 interface SidebarProps {
@@ -93,6 +103,36 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
 
             <li>
               <Link
+                href="/transactions"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/transactions") ||
+                  isActive("/transactions/") ||
+                  pathname.startsWith("/transactions")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <GrTransaction size={20} />
+                <span>Transactions</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/posts"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/posts") ||
+                  isActive("/posts/") ||
+                  pathname.startsWith("/posts")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <BsPostcardFill size={20} />
+                <span>Posts</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/users"
                 className={`flex items-center gap-3 p-2 rounded ${
                   isActive("/users") ||
@@ -139,12 +179,36 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </li>
             <li>
               <Link
+                href="/music-albums"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/music-albums")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <MdOutlineLibraryMusic size={20} />
+                <span>Music Albums</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/song-sell"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/song-sell") ? "bg-blue-700" : "hover:bg-blue-700"
+                }`}
+              >
+                <TbMusicDollar size={20} />
+                <span>song-sell</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/genre"
                 className={`flex items-center gap-3 p-2 rounded ${
                   isActive("/genre") ? "bg-blue-700" : "hover:bg-blue-700"
                 }`}
               >
-                <MdOutlineLibraryMusic size={20} />
+                <TbMusicPlus size={20} />
                 <span>Genre</span>
               </Link>
             </li>
@@ -185,6 +249,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </li>
             <li>
               <Link
+                href="/products"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/products") ? "bg-blue-700" : "hover:bg-blue-700"
+                }`}
+              >
+                <SiProducthunt size={20} />
+                <span>Products</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/orders"
                 className={`flex items-center gap-3 p-2 rounded ${
                   isActive("/orders") ? "bg-blue-700" : "hover:bg-blue-700"
@@ -192,6 +267,30 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               >
                 <FaClipboardList size={20} />
                 <span>Orders</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/product-sell"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/product-sell")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <FaCircleDollarToSlot size={20} />
+                <span>Product Sell</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/statuses"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/statuses") ? "bg-blue-700" : "hover:bg-blue-700"
+                }`}
+              >
+                <FaClipboardList size={20} />
+                <span>Order Statuses</span>
               </Link>
             </li>
             <li>
@@ -231,7 +330,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                     : "hover:bg-blue-700"
                 }`}
               >
-                {/* <FcFaq size={20} /> */}
                 <FaClipboardQuestion size={20} />
                 <span>FAQ</span>
               </Link>
@@ -279,6 +377,36 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               >
                 <BsEnvelopeOpenHeart size={20} />
                 <span>Messages</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/set-commissions"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/set-commissions") ||
+                  isActive("/set-commissions/") ||
+                  pathname.startsWith("/set-commissions")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <FaPercent size={20} />
+                <span>Commissions</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/settings"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/settings") ||
+                  isActive("/settings/") ||
+                  pathname.startsWith("/settings")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <IoSettings size={20} />
+                <span>Settings</span>
               </Link>
             </li>
             <li>
