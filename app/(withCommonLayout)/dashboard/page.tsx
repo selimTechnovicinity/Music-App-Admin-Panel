@@ -4,28 +4,25 @@ import API from "@/lib/axios-client";
 import {
   DollarSign,
   Download,
-  Headphones,
   Mic2,
   Music,
   Radio,
   Store,
-  TrendingUp,
   User,
   Wallet,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  Cell,
-  Line,
-  LineChart,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-
+// import {
+//   Cell,
+//   Line,
+//   LineChart,
+//   Pie,
+//   PieChart,
+//   ResponsiveContainer,
+//   Tooltip,
+//   XAxis,
+//   YAxis,
+// } from "recharts";
 
 // Summary Card Component
 const SummaryCard = ({
@@ -294,7 +291,7 @@ export default function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Active Users Line Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 col-span-1 lg:col-span-2">
+        {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 col-span-1 lg:col-span-2">
           <div className="h-64">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-sky-500" /> Platform Growth
@@ -322,10 +319,10 @@ export default function Dashboard() {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </div> */}
 
         {/* Genre Distribution Pie Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div className="h-64">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Headphones className="h-5 w-5 text-purple-500" /> Music Genre
@@ -357,7 +354,7 @@ export default function Dashboard() {
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Detailed Lists Section */}
