@@ -8,6 +8,7 @@ import {
   FiEye,
   FiEyeOff,
   FiMusic,
+  FiSearch,
 } from "react-icons/fi";
 
 interface User {
@@ -26,7 +27,7 @@ interface Song {
   playCount: number;
   releaseDate: string;
   createdAt: string;
-  isActive?: boolean;
+  isDeleted?: boolean;
 }
 
 export default function SongsPage() {
@@ -35,17 +36,18 @@ export default function SongsPage() {
   const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchSongs();
-  }, [pageNo]);
+  }, [searchQuery, pageNo]);
 
   const fetchSongs = async () => {
-    setIsLoading(true);
     try {
       const response = await API.post("/songs/all", {
         page: pageNo,
         limit: limit,
+        search: searchQuery,
       });
       setSongs(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -56,21 +58,16 @@ export default function SongsPage() {
     }
   };
 
-  const toggleSongStatus = async (songId: string, currentStatus: boolean) => {
+  const toggleSongStatus = async (songId: string) => {
     try {
-      await API.patch(`/songs/${songId}/status`, { isActive: !currentStatus });
+      const data = await API.post(`/songs/hide/${songId}`);
+      console.log(data);
       fetchSongs();
     } catch (error) {
       console.error("Failed to update song status:", error);
     }
   };
 
-  const formatDuration = (duration: number | null) => {
-    if (!duration) return "0:00";
-    const minutes = Math.floor(duration / 60);
-    const seconds = Math.floor(duration % 60);
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-  };
 
   const handleNext = () => {
     if (pageNo < totalPages) setPageNo((prev) => prev + 1);
@@ -98,7 +95,7 @@ export default function SongsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
@@ -114,6 +111,23 @@ export default function SongsPage() {
           <p className="text-gray-600 dark:text-gray-400">
             Manage all songs in the system
           </p>
+        </div>
+
+        {/* search  */}
+        <div className="relative w-full md:w-96">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FiSearch className="text-gray-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search song..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPageNo(1);
+            }}
+            className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          />
         </div>
       </div>
 
@@ -221,16 +235,14 @@ export default function SongsPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
-                      onClick={() =>
-                        toggleSongStatus(song._id, song.isActive ?? true)
-                      }
+                      onClick={() => toggleSongStatus(song._id)}
                       className={`flex items-center px-3 py-1 rounded-md ${
-                        song.isActive !== false
+                        song.isDeleted === false
                           ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800"
                           : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
                       }`}
                     >
-                      {song.isActive !== false ? (
+                      {song.isDeleted === false ? (
                         <>
                           <FiEye className="mr-1" />
                           Hide

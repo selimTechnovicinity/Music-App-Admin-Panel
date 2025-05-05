@@ -18,6 +18,7 @@ export default function LanguagesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formValue, setFormValue] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchLanguages();
@@ -29,6 +30,8 @@ export default function LanguagesPage() {
       setLanguages(res.data.data);
     } catch (err) {
       console.error("Error fetching languages:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,6 +67,14 @@ export default function LanguagesPage() {
     setEditingId(language._id);
     setIsModalOpen(true);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-5xl mx-auto">

@@ -31,7 +31,7 @@ interface Album {
   price: number;
   songs: Song[];
   photo: string;
-  isActive: boolean;
+  isDeleted?: boolean;
   createdAt: string;
 }
 
@@ -62,11 +62,9 @@ export default function AlbumsPage() {
     }
   };
 
-  const toggleAlbumStatus = async (albumId: string, currentStatus: boolean) => {
+  const toggleAlbumStatus = async (albumId: string) => {
     try {
-      await API.patch(`/albums/${albumId}/status`, {
-        isActive: !currentStatus,
-      });
+      await API.post(`/albums/hide/${albumId}`);
       fetchAlbums();
     } catch (error) {
       console.error("Failed to update album status:", error);
@@ -99,7 +97,7 @@ export default function AlbumsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
@@ -212,16 +210,26 @@ export default function AlbumsPage() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleAlbumStatus(album._id, album.isActive);
+                      toggleAlbumStatus(album._id);
                     }}
-                    className={`absolute top-2 right-2 p-2 rounded-full ${
-                      album.isActive
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-red-500 hover:bg-red-600"
+                    className={`absolute flex top-2 right-2 items-center px-3 py-1 rounded-md ${
+                      !album.isDeleted
+                        ? "bg-green-400 dark:bg-green-900 text-green-800 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800"
+                        : "bg-red-400 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
                     } text-white shadow-md`}
-                    title={album.isActive ? "Disable album" : "Enable album"}
+                    title={!album.isDeleted ? "Disable album" : "Enable album"}
                   >
-                    {album.isActive ? <FiEye /> : <FiEyeOff />}
+                    {!album.isDeleted ? (
+                      <>
+                        <FiEye className="mr-1" />
+                        Hide
+                      </>
+                    ) : (
+                      <>
+                        <FiEyeOff className="mr-1" />
+                        Show
+                      </>
+                    )}
                   </button>
                 </div>
                 <div className="p-4">

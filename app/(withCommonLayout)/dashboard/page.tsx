@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent } from "@/ui/Card";
+import API from "@/lib/axios-client";
 import {
   DollarSign,
   Download,
@@ -13,6 +13,7 @@ import {
   User,
   Wallet,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   Cell,
   Line,
@@ -25,21 +26,124 @@ import {
   YAxis,
 } from "recharts";
 
+// Summary Card Component
+const SummaryCard = ({
+  title,
+  value,
+  change,
+  icon,
+}: {
+  title: string;
+  value: string | number;
+  change?: string;
+  icon: React.ReactNode;
+}) => (
+  <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+    <div className="flex justify-between">
+      <div>
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+          {title}
+        </p>
+        <h3 className="text-2xl font-bold mt-1 text-gray-800 dark:text-white">
+          {value}
+        </h3>
+      </div>
+      <div className="h-10 w-10 rounded-full bg-blue-50 dark:bg-gray-700 flex items-center justify-center">
+        {icon}
+      </div>
+    </div>
+    {change && (
+      <p className="mt-2 text-sm font-medium text-green-500">
+        {change} <span className="text-gray-500">vs last month</span>
+      </p>
+    )}
+  </div>
+);
+
+// Song Item Component
+const SongItem = ({
+  rank,
+  name,
+  plays,
+  change,
+}: {
+  rank: number;
+  name: string;
+  plays: string;
+  change: string;
+}) => (
+  <li className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">
+    <div className="flex items-center">
+      <span className="font-medium text-gray-500 w-6">{rank}.</span>
+      <span className="font-medium text-gray-800 dark:text-white">{name}</span>
+    </div>
+    <div className="text-right">
+      <p className="text-sm font-medium">{plays}</p>
+      <p
+        className={`text-xs ${
+          change.startsWith("+") ? "text-green-500" : "text-red-500"
+        }`}
+      >
+        {change}
+      </p>
+    </div>
+  </li>
+);
+
+// Artist Item Component
+const ArtistItem = ({
+  name,
+  earnings,
+  songs,
+}: {
+  name: string;
+  earnings: string;
+  songs: string;
+}) => (
+  <li className="flex items-center justify-between p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">
+    <span className="font-medium text-gray-800 dark:text-white">{name}</span>
+    <div className="text-right">
+      <p className="text-sm font-medium">{earnings}</p>
+      <p className="text-xs text-gray-500">{songs} songs</p>
+    </div>
+  </li>
+);
+
+// Activity Item Component
+const ActivityItem = ({
+  icon,
+  title,
+  time,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  time: string;
+}) => (
+  <div className="flex items-start gap-3">
+    <div className="mt-1 flex-shrink-0">{icon}</div>
+    <div>
+      <p className="font-medium text-gray-800 dark:text-white">{title}</p>
+      <p className="text-sm text-gray-500">{time}</p>
+    </div>
+  </div>
+);
+
+// Sample data for charts (you can replace with real data)
 const revenueData = [
-  { month: "Jan", revenue: 4000 },
-  { month: "Feb", revenue: 3000 },
-  { month: "Mar", revenue: 5000 },
-  { month: "Apr", revenue: 6000 },
-  { month: "May", revenue: 7500 },
-  { month: "Jun", revenue: 9000 },
+  { month: "Jan", revenue: 4000, users: 2400 },
+  { month: "Feb", revenue: 3000, users: 1398 },
+  { month: "Mar", revenue: 2000, users: 9800 },
+  { month: "Apr", revenue: 2780, users: 3908 },
+  { month: "May", revenue: 1890, users: 4800 },
+  { month: "Jun", revenue: 2390, users: 3800 },
 ];
 
 const genreData = [
   { name: "Pop", value: 35 },
-  { name: "Hip Hop", value: 25 },
-  { name: "Rock", value: 20 },
+  { name: "Rock", value: 25 },
+  { name: "Hip Hop", value: 20 },
   { name: "Electronic", value: 15 },
-  { name: "Other", value: 5 },
+  { name: "R&B", value: 5 },
 ];
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
@@ -47,53 +151,92 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 const withdrawalRequests = [
   {
     id: 1,
-    artist: "Taylor Swift",
-    amount: "$2,500",
-    date: "2023-06-15",
+    artist: "John Doe",
+    amount: "$1,250",
+    date: "Today",
     status: "Pending",
   },
   {
     id: 2,
-    artist: "Drake",
-    amount: "$1,800",
-    date: "2023-06-14",
+    artist: "Jane Smith",
+    amount: "$850",
+    date: "Yesterday",
     status: "Approved",
   },
   {
     id: 3,
-    artist: "Billie Eilish",
-    amount: "$3,200",
-    date: "2023-06-12",
+    artist: "Mike Johnson",
+    amount: "$2,100",
+    date: "2 days ago",
     status: "Pending",
   },
 ];
 
 export default function Dashboard() {
+  const [dashboardData, setDashboardData] = useState({
+    totalUsers: 0,
+    totalMusicians: 0,
+    totalSongs: 0,
+    totalAlbums: 0,
+    totalProducts: 0,
+    totalOrders: 0,
+    totalPosts: 0,
+    totalTransactions: 0,
+    totalDonations: 0,
+    totalOrdersRevenue: 0,
+    totalMusicsRevenue: 0,
+    totalRevenue: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const res = await API.get("/users/admin/dashboard");
+      setDashboardData(res.data.data);
+    } catch (err) {
+      console.error("Error fetching dashboard data:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 space-y-6 bg-gray-100">
+    <div className="p-6 space-y-6 bg-gray-100 dark:bg-gray-900">
       {/* Top Summary Cards - Expanded */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <SummaryCard
           title="Total Users"
-          value="24,850"
+          value={dashboardData.totalUsers.toLocaleString()}
           change="+12%"
           icon={<User className="h-6 w-6 text-blue-500" />}
         />
         <SummaryCard
           title="Total Artists"
-          value="1,240"
+          value={dashboardData.totalMusicians.toLocaleString()}
           change="+5%"
           icon={<Mic2 className="h-6 w-6 text-blue-500" />}
         />
         <SummaryCard
           title="Songs Uploaded"
-          value="32,450"
+          value={dashboardData.totalSongs.toLocaleString()}
           change="+8%"
           icon={<Music className="h-6 w-6 text-blue-500" />}
         />
         <SummaryCard
           title="Total Music Albums"
-          value="$12,500"
+          value={dashboardData.totalAlbums.toLocaleString()}
           icon={<Wallet className="h-6 w-6 text-blue-500" />}
         />
       </div>
@@ -101,27 +244,27 @@ export default function Dashboard() {
       {/* Second Row Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <SummaryCard
-          title="Active Subscriptions"
-          value="8,420"
-          icon={<Radio className="h-6 w-6 text-red-500" />}
+          title="Total Products"
+          value={dashboardData.totalProducts.toLocaleString()}
+          icon={<Store className="h-6 w-6 text-green-500" />}
         />
         <SummaryCard
           title="Total Orders"
-          value="8,420"
+          value={dashboardData.totalOrders.toLocaleString()}
           icon={<Store className="h-6 w-6 text-green-500" />}
         />
-
         <SummaryCard
-          title="New Releases"
-          value="1,245"
-          icon={<Music className="h-6 w-6 text-green-500" />}
+          title="Total Posts"
+          value={dashboardData.totalPosts.toLocaleString()}
+          icon={<Radio className="h-6 w-6 text-red-500" />}
         />
         <SummaryCard
           title="Total Donation Received"
-          value="$12,500"
+          value={`$${dashboardData.totalDonations.toLocaleString()}`}
           icon={<DollarSign className="h-6 w-6 text-green-500" />}
         />
       </div>
+
       {/* Third Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <SummaryCard
@@ -129,21 +272,19 @@ export default function Dashboard() {
           value="$12,500"
           icon={<DollarSign className="h-6 w-6 text-red-500" />}
         />
-
         <SummaryCard
-          title="Total Payment Received for Orders"
-          value="$12,500"
+          title="Revenue from Orders"
+          value={`$${dashboardData.totalOrdersRevenue.toLocaleString()}`}
           icon={<DollarSign className="h-6 w-6 text-green-500" />}
         />
-
         <SummaryCard
-          title="Total Payment Received for Music"
-          value="$12,500"
+          title="Revenue from Music"
+          value={`$${dashboardData.totalMusicsRevenue.toLocaleString()}`}
           icon={<DollarSign className="h-6 w-6 text-green-500" />}
         />
         <SummaryCard
           title="Total Revenue"
-          value="$48,750"
+          value={`$${dashboardData.totalRevenue.toLocaleString()}`}
           change="+22%"
           icon={<DollarSign className="h-6 w-6 text-emerald-500" />}
         />
@@ -152,8 +293,8 @@ export default function Dashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Active Users Line Chart */}
-        <Card className="p-4 col-span-1 lg:col-span-2">
-          <CardContent className="h-64">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 col-span-1 lg:col-span-2">
+          <div className="h-64">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-sky-500" /> Platform Growth
               (Last 6 Months)
@@ -179,12 +320,12 @@ export default function Dashboard() {
                 />
               </LineChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Genre Distribution Pie Chart */}
-        <Card className="p-4">
-          <CardContent className="h-64">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+          <div className="h-64">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Headphones className="h-5 w-5 text-purple-500" /> Music Genre
               Distribution
@@ -214,15 +355,15 @@ export default function Dashboard() {
                 <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Detailed Lists Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Withdrawal Requests */}
-        <Card className="p-4">
-          <CardContent>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+          <div>
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Wallet className="h-5 w-5 text-amber-500" /> Pending Withdrawals
             </h2>
@@ -230,14 +371,18 @@ export default function Dashboard() {
               {withdrawalRequests.map((request) => (
                 <div
                   key={request.id}
-                  className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                  className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
                 >
                   <div>
-                    <p className="font-medium">{request.artist}</p>
+                    <p className="font-medium dark:text-white">
+                      {request.artist}
+                    </p>
                     <p className="text-sm text-gray-500">{request.date}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold">{request.amount}</p>
+                    <p className="font-semibold dark:text-white">
+                      {request.amount}
+                    </p>
                     <p
                       className={`text-sm ${
                         request.status === "Approved"
@@ -250,16 +395,16 @@ export default function Dashboard() {
                   </div>
                 </div>
               ))}
-              <button className="w-full mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium">
+              <button className="w-full mt-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium">
                 View All Withdrawals →
               </button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Most Played Songs */}
-        <Card className="p-4">
-          <CardContent>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+          <div>
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Music className="h-5 w-5 text-green-500" /> Top Trending Songs
             </h2>
@@ -275,12 +420,12 @@ export default function Dashboard() {
               <SongItem rank={4} name="As It Was" plays="3.8M" change="+22%" />
               <SongItem rank={5} name="Bad Habits" plays="3.5M" change="+5%" />
             </ul>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Top Artists */}
-        <Card className="p-4">
-          <CardContent>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+          <div>
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Mic2 className="h-5 w-5 text-purple-500" /> Top Earning Artists
             </h2>
@@ -291,13 +436,13 @@ export default function Dashboard() {
               <ArtistItem name="Taylor Swift" earnings="$76,800" songs="150" />
               <ArtistItem name="BTS" earnings="$65,300" songs="95" />
             </ul>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       {/* Recent Activity Section */}
-      <Card className="p-4">
-        <CardContent>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <div>
           <h2 className="text-lg font-semibold mb-4">
             Recent Platform Activity
           </h2>
@@ -323,16 +468,16 @@ export default function Dashboard() {
               time="2 days ago"
             />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Export Section */}
       <div className="flex justify-between mt-6">
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-gray-500 dark:text-gray-400">
           Last updated: {new Date().toLocaleString()}
         </div>
         <div className="flex gap-4">
-          <button className="flex items-center gap-2 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition">
+          <button className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-lg shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition">
             <Download className="h-5 w-5" />
             Download CSV
           </button>
@@ -341,124 +486,6 @@ export default function Dashboard() {
             Full Report PDF
           </button>
         </div>
-      </div>
-    </div>
-  );
-}
-
-function SummaryCard({
-  title,
-  value,
-  icon,
-  change,
-}: {
-  title: string;
-  value: string;
-  icon: React.ReactNode;
-  change?: string;
-}) {
-  return (
-    <Card className="p-4">
-      <div className="flex items-start justify-between">
-        <div>
-          <h3 className="text-sm text-gray-500">{title}</h3>
-          <p className="text-2xl font-semibold mt-1">{value}</p>
-          {change && (
-            <p
-              className={`text-sm mt-1 ${
-                change.startsWith("+") ? "text-green-500" : "text-red-500"
-              }`}
-            >
-              {change} from last month
-            </p>
-          )}
-        </div>
-        <div className="p-3 bg-opacity-20 bg-gray-300 rounded-full">{icon}</div>
-      </div>
-    </Card>
-  );
-}
-
-function SongItem({
-  rank,
-  name,
-  plays,
-  change,
-}: {
-  rank: number;
-  name: string;
-  plays: string;
-  change?: string;
-}) {
-  return (
-    <li className="flex justify-between items-center p-2 hover:bg-gray-50 rounded">
-      <div className="flex gap-3 items-center">
-        <span
-          className={`font-bold ${
-            rank === 1
-              ? "text-yellow-500"
-              : rank === 2
-              ? "text-gray-400"
-              : rank === 3
-              ? "text-amber-700"
-              : "text-gray-300"
-          }`}
-        >
-          {rank}
-        </span>
-        <span>{name}</span>
-      </div>
-      <div className="text-right">
-        <p className="text-gray-600">{plays}</p>
-        {change && (
-          <p
-            className={`text-xs ${
-              change.startsWith("+") ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {change}
-          </p>
-        )}
-      </div>
-    </li>
-  );
-}
-
-function ArtistItem({
-  name,
-  songs,
-  earnings,
-}: {
-  name: string;
-  songs: string;
-  earnings: string;
-}) {
-  return (
-    <li className="flex justify-between items-center p-2 hover:bg-gray-50 rounded">
-      <div>
-        <p className="font-medium">{name}</p>
-        <p className="text-sm text-gray-400">{songs} Songs</p>
-      </div>
-      <span className="font-semibold text-green-600">{earnings}</span>
-    </li>
-  );
-}
-
-function ActivityItem({
-  icon,
-  title,
-  time,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  time: string;
-}) {
-  return (
-    <div className="flex items-start gap-3">
-      <div className="mt-1">{icon}</div>
-      <div className="flex-1">
-        <p className="font-medium">{title}</p>
-        <p className="text-sm text-gray-500">{time}</p>
       </div>
     </div>
   );

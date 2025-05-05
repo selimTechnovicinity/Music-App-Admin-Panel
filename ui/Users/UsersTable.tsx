@@ -1,9 +1,18 @@
 "use client";
 import { TUser } from "@/app/(withCommonLayout)/users/page";
+import API from "@/lib/axios-client";
 import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function UsersTable({ users }: { users: TUser[] }) {
+  const toggleStatus = async (userId: string) => {
+    try {
+      const data = await API.post(`/users/hide/${userId}`);
+    } catch (error) {
+      console.error("Failed to update song status:", error);
+    }
+  };
   return (
     <div className="my-5 mx-auto w-full max-w-6xl px-4">
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -14,7 +23,7 @@ export default function UsersTable({ users }: { users: TUser[] }) {
               <th className="p-3 text-left">Phone Number</th>
               <th className="p-3 text-left">Email</th>
               <th className="p-3 text-left">Role</th>
-              <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-left">Action</th>
               <th className="p-3 text-left">Edit</th>
             </tr>
           </thead>
@@ -39,10 +48,29 @@ export default function UsersTable({ users }: { users: TUser[] }) {
                   </span>
                 </td>
                 <td className="p-3">
-                  {/* <ToggleButton status={user?.isActive} id={{ id: user?.id }} /> */}
+                  <button
+                    onClick={() => toggleStatus(user._id)}
+                    className={`flex items-center px-3 py-1 rounded-md ${
+                      user.isDeleted === false
+                        ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800"
+                        : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
+                    }`}
+                  >
+                    {user.isDeleted === false ? (
+                      <>
+                        <FiEye className="mr-1" />
+                        Hide
+                      </>
+                    ) : (
+                      <>
+                        <FiEyeOff className="mr-1" />
+                        Show
+                      </>
+                    )}
+                  </button>
                 </td>
                 <td className="p-3 flex space-x-2">
-                  <Link href={`/users/edit/${user?.id}`}>
+                  <Link href={`/users/edit/${user?._id}`}>
                     <button className="cursor-pointer text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition">
                       <FaEdit />
                     </button>

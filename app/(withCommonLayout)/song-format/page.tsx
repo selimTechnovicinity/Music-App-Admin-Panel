@@ -16,7 +16,7 @@ export default function SongFormatsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formValue, setFormValue] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
-
+  const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     fetchFormats();
   }, []);
@@ -27,6 +27,8 @@ export default function SongFormatsPage() {
       setFormats(res.data.data);
     } catch (err) {
       console.error("Error fetching formats:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,6 +64,14 @@ export default function SongFormatsPage() {
     setEditingId(format._id);
     setIsModalOpen(true);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-5xl mx-auto">

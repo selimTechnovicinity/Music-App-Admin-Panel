@@ -46,7 +46,7 @@ export const logoutMutationFn = async () => await API.post(`/auth/logout`);
 export const getSongFormats = async () => await API.get("/song_formats");
 
 export const updateUser = async (formData: TUpdateData) => {
-  const res = await API.patch(`/users`, formData);
+  const res = await API.post(`/users/user`, formData);
 
   const userInfo = await res.data;
 
@@ -58,20 +58,25 @@ export const updatePassword = async (formData: TUpdatePasswordData) => {
   return result;
 };
 
+export const getUser = async () => {
+  const res = await API.get(`/users/user`);
+
+  return res.data;
+};
 export const getUserById = async (id: string) => {
-  const res = await API.get(`/users/${id}`);
-  const user = await res.data;
-  return user;
+  const res = await API.get(`/users/user/${id}`);
+
+  return res.data;
 };
 
-export const getAllUsers = async (pageNo?: number, limit?: number) => {
-  const params = new URLSearchParams();
-  if (pageNo !== undefined) params.append("page", String(pageNo));
-  if (limit !== undefined) params.append("limit", String(limit));
-
-  const queryString = params.toString();
-
-  const res = await API.get(`/users${queryString ? "?" + queryString : ""}`);
+export const getAllUsers = async (
+  role: string,
+  pageNo?: number,
+  limit?: number
+) => {
+  const res = await API.get(
+    `/users?page=${pageNo}&limit=${limit}&role=${role}`
+  );
   const users = res.data;
   return users;
 };

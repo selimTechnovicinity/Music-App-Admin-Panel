@@ -2,17 +2,19 @@
 
 import Loading from "@/app/loading";
 import { getAllUsers } from "@/lib/api";
-import UsersTable from "@/ui/Users/UsersTable";
+import API from "@/lib/axios-client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export type TUser = {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   phone?: string;
   role: string;
-  isActive?: boolean;
+  isDeleted?: boolean;
   __v?: number;
 };
 
@@ -24,25 +26,33 @@ const Users = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const limit = 9;
 
+  const fetchUsers = async () => {
+    try {
+      const res = await getAllUsers("user", pageNo, limit);
+      const usersData = res?.data;
+      const totalPages = res?.totalPages;
+
+      setUsers(usersData || []);
+      setTotalPages(totalPages);
+    } catch {
+      setError("No users found. Please add a user.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const res = await getAllUsers(pageNo, limit);
-        const usersData = res?.data;
-        const totalPages = res?.totalPages;
-
-        setUsers(usersData || []);
-        setTotalPages(totalPages);
-      } catch {
-        setError("No users found. Please add a user.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchUsers();
   }, [pageNo]);
+
+  const toggleStatus = async (userId: string) => {
+    try {
+      await API.post(`/users/hide/${userId}`);
+      fetchUsers();
+    } catch (error) {
+      console.error("Failed to update song status:", error);
+    }
+  };
 
   // Pagination Handlers
   const handleNext = () => {
@@ -85,7 +95,74 @@ const Users = () => {
       ) : (
         <div>
           {loading && <Loading />}
-          <UsersTable users={users} />
+          <div className="my-5 mx-auto w-full max-w-6xl px-4">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <table className="min-w-full text-sm text-left text-gray-500 dark:text-gray-300">
+                <thead>
+                  <tr className="bg-blue-100 dark:bg-gray-700">
+                    <th className="p-3 text-left">Name</th>
+                    <th className="p-3 text-left">Phone Number</th>
+                    <th className="p-3 text-left">Email</th>
+                    <th className="p-3 text-left">Role</th>
+                    <th className="p-3 text-left">Action</th>
+                    <th className="p-3 text-left">Edit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr
+                      key={index}
+                      className="even:bg-blue-100 odd:bg-white dark:even:bg-gray-800 dark:odd:bg-gray-900"
+                    >
+                      <td className="p-3">{user?.name}</td>
+                      <td className="p-3">{user?.phone}</td>
+                      <td className="p-3">{user?.email}</td>
+                      <td className="p-3">
+                        <span
+                          className={`px-2 py-1 text-xs rounded-lg ${
+                            user?.role === "Users"
+                              ? "bg-blue-500 text-white"
+                              : "bg-green-500 text-white"
+                          }`}
+                        >
+                          {user?.role === "users" ? "Users" : user?.role}
+                        </span>
+                      </td>
+                      <td className="p-3">
+                        <button
+                          onClick={() => toggleStatus(user._id)}
+                          className={`flex items-center px-3 py-1 rounded-md ${
+                            user.isDeleted === false
+                              ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800"
+                              : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
+                          }`}
+                        >
+                          {user.isDeleted === false ? (
+                            <>
+                              <FiEye className="mr-1" />
+                              Block
+                            </>
+                          ) : (
+                            <>
+                              <FiEyeOff className="mr-1" />
+                              Unblock
+                            </>
+                          )}
+                        </button>
+                      </td>
+                      <td className="p-3 flex space-x-2">
+                        <Link href={`/users/edit/${user?._id}`}>
+                          <button className="cursor-pointer text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition">
+                            <FaEdit />
+                          </button>
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
           {/* Pagination */}
           <div className=" left-0 w-ful  flex justify-center gap-2">

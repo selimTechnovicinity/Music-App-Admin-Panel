@@ -26,7 +26,7 @@ interface Post {
   likes: string[];
   shares: string[];
   createdAt: string;
-  isActive?: boolean;
+  isDeleted?: boolean;
 }
 
 export default function PostsPage() {
@@ -41,7 +41,6 @@ export default function PostsPage() {
   }, [searchQuery, pageNo]);
 
   const fetchPosts = async () => {
-    setIsLoading(true);
     try {
       const response = await API.get(
         `/posts?search=${searchQuery}&page=${pageNo}`
@@ -55,9 +54,9 @@ export default function PostsPage() {
     }
   };
 
-  const togglePostStatus = async (postId: string, currentStatus: boolean) => {
+  const togglePostStatus = async (postId: string) => {
     try {
-      await API.patch(`/posts/${postId}/status`, { isActive: !currentStatus });
+      await API.post(`/posts/hide/${postId}`);
       fetchPosts();
     } catch (error) {
       console.error("Failed to update post status:", error);
@@ -90,7 +89,7 @@ export default function PostsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
@@ -109,6 +108,7 @@ export default function PostsPage() {
           </p>
         </div>
 
+        {/* search */}
         <div className="relative w-full md:w-96">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <FiSearch className="text-gray-400" />
@@ -140,17 +140,28 @@ export default function PostsPage() {
                 className="w-full h-full object-cover"
               />
               <button
-                onClick={() =>
-                  togglePostStatus(post._id, post.isActive ?? true)
-                }
-                className={`absolute top-2 right-2 p-2 rounded-full ${
-                  post.isActive !== false
-                    ? "bg-green-500 hover:bg-green-600"
-                    : "bg-red-500 hover:bg-red-600"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  togglePostStatus(post._id);
+                }}
+                className={`absolute flex top-2 right-2 items-center px-3 py-1 rounded-md ${
+                  !post.isDeleted
+                    ? "bg-green-400 dark:bg-green-900 text-green-800 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800"
+                    : "bg-red-400 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
                 } text-white shadow-md`}
-                title={post.isActive !== false ? "Hide post" : "Show post"}
+                title={!post.isDeleted ? "Disable post" : "Enable post"}
               >
-                {post.isActive !== false ? <FiEye /> : <FiEyeOff />}
+                {!post.isDeleted ? (
+                  <>
+                    <FiEye className="mr-1" />
+                    Hide
+                  </>
+                ) : (
+                  <>
+                    <FiEyeOff className="mr-1" />
+                    Show
+                  </>
+                )}
               </button>
             </div>
             <div className="p-4">

@@ -18,6 +18,7 @@ export default function MoodsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formValue, setFormValue] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchMoods();
@@ -29,6 +30,8 @@ export default function MoodsPage() {
       setMoods(res.data.data);
     } catch (err) {
       console.error("Error fetching moods:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,7 +67,13 @@ export default function MoodsPage() {
     setEditingId(mood._id);
     setIsModalOpen(true);
   };
-
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-4">

@@ -190,7 +190,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <span>Music Albums</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/song-sell"
                 className={`flex items-center gap-3 p-2 rounded ${
@@ -200,7 +200,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <TbMusicDollar size={20} />
                 <span>song-sell</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/genre"
@@ -269,7 +269,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <span>Orders</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/product-sell"
                 className={`flex items-center gap-3 p-2 rounded ${
@@ -281,7 +281,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <FaCircleDollarToSlot size={20} />
                 <span>Product Sell</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/statuses"

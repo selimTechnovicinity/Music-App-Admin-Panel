@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { getUserById, updateUser } from "@/lib/api";
+import { getUser, updateUser } from "@/lib/api";
 import { getUserInfo } from "@/services/auth.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
@@ -39,17 +39,17 @@ const EditUser = () => {
   const { data, isLoading: isUserLoading } = useQuery({
     queryKey: ["user", decodedToken?.id],
     // queryFn: () => getUserById(decodedToken?.id),
-    enabled: !!decodedToken?.id,
     queryFn: async () => {
-      const data = await getUserById(decodedToken?.id);
-      if (data?.data?.user?.role !== "super-admin") {
-        toast.error("You are not authorized to access this page.");
-        router.push("/login");
-        return null;
-      }
+      const data = await getUser();
+      console.log(data?.data.name);
+      // if (data?.data?.user?.role !== "admin") {
+      //   toast.error("You are not authorized to access this page.");
+      //   router.push("/login");
+      //   return null;
+      // }
       setFormData({
-        name: data?.data?.user?.name || "",
-        phone: data?.data?.user?.phone || "",
+        name: data?.data.name || "",
+        phone: data?.data?.phone || "",
       });
       return data;
     },
@@ -90,8 +90,8 @@ const EditUser = () => {
 
   if (isUserLoading) {
     return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="animate-spin" size={32} />
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
   }
@@ -102,7 +102,7 @@ const EditUser = () => {
         <h2 className="text-2xl font-bold text-center mb-4 text-gray-800 dark:text-gray-100">
           Update Profile
         </h2>
-        {data?.data?.user && (
+        {data?.data && (
           <form onSubmit={handleUpdate}>
             <div className="mb-4">
               <label
@@ -140,14 +140,10 @@ const EditUser = () => {
             </div>
 
             <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              <strong>Email:</strong> {data?.data?.user?.email || "N/A"}
+              <strong>Email:</strong> {data?.data?.email || "N/A"}
             </div>
             <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              <strong>Role:</strong> {data?.data?.user?.role || "N/A"}
-            </div>
-            <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              <strong>Status:</strong>{" "}
-              {data?.data?.user?.isActive ? "Active" : "Inactive"}
+              <strong>Role:</strong> {data?.data?.role || "N/A"}
             </div>
 
             <button
