@@ -127,24 +127,24 @@ const ActivityItem = ({
 );
 
 // Sample data for charts (you can replace with real data)
-const revenueData = [
-  { month: "Jan", revenue: 4000, users: 2400 },
-  { month: "Feb", revenue: 3000, users: 1398 },
-  { month: "Mar", revenue: 2000, users: 9800 },
-  { month: "Apr", revenue: 2780, users: 3908 },
-  { month: "May", revenue: 1890, users: 4800 },
-  { month: "Jun", revenue: 2390, users: 3800 },
-];
+// const revenueData = [
+//   { month: "Jan", revenue: 4000, users: 2400 },
+//   { month: "Feb", revenue: 3000, users: 1398 },
+//   { month: "Mar", revenue: 2000, users: 9800 },
+//   { month: "Apr", revenue: 2780, users: 3908 },
+//   { month: "May", revenue: 1890, users: 4800 },
+//   { month: "Jun", revenue: 2390, users: 3800 },
+// ];
 
-const genreData = [
-  { name: "Pop", value: 35 },
-  { name: "Rock", value: 25 },
-  { name: "Hip Hop", value: 20 },
-  { name: "Electronic", value: 15 },
-  { name: "R&B", value: 5 },
-];
+// const genreData = [
+//   { name: "Pop", value: 35 },
+//   { name: "Rock", value: 25 },
+//   { name: "Hip Hop", value: 20 },
+//   { name: "Electronic", value: 15 },
+//   { name: "R&B", value: 5 },
+// ];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+// const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
 const withdrawalRequests = [
   {
