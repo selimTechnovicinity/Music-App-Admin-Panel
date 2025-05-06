@@ -18,16 +18,22 @@ const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const mutation = useMutation({
     mutationFn: loginMutationFn,
     onSuccess: (res) => {
-      Cookies.set("accessToken", res?.data?.data.accessToken);
-      Cookies.set("refreshToken", res?.data?.data?.refreshToken);
-      toast.success(res.data.message);
-      router.push("/dashboard");
+      if (res.data.data.user.role === "admin") {
+        Cookies.set("accessToken", res?.data?.data.accessToken);
+        Cookies.set("refreshToken", res?.data?.data?.refreshToken);
+        toast.success(res.data.message);
+        router.push("/dashboard");
+      } else {
+        setError("Only admin can login");
+      }
     },
     onError: (error: any) => {
+      setError(error?.response?.data?.message);
       toast.error(
         error?.response?.data?.message || "Failed to login. Please try again."
       );
@@ -64,8 +70,7 @@ const Login = () => {
           />
           {mutation.isError && (
             <div className="mt-3 text-sm text-red-600 dark:text-red-400">
-              {mutation.error?.response?.data?.message ||
-                "Failed to login. Please try again."}
+              {error || "Failed to login. Please try again."}
             </div>
           )}
           <button

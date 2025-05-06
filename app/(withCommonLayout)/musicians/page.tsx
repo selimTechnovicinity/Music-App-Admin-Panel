@@ -173,7 +173,7 @@ const Users = () => {
                   : "bg-blue-950 dark:bg-blue-800 text-white cursor-pointer hover:bg-blue-800 dark:hover:bg-blue-700"
               }`}
             >
-              Precedente
+              Previous
             </button>
 
             {getPaginationNumbers().map((page) => (
@@ -199,7 +199,7 @@ const Users = () => {
                   : "bg-blue-950 dark:bg-blue-800 text-white cursor-pointer hover:bg-blue-800 dark:hover:bg-blue-700"
               }`}
             >
-              Avanti
+              Next
             </button>
           </div>
         </div>

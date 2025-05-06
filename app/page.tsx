@@ -6,7 +6,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/users");
+    router.push("/dashboard");
   }, []);
 
   return <div></div>;

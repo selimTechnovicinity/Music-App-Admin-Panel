@@ -12,7 +12,7 @@ import {
   FaMicrophoneAlt,
   FaPercent,
 } from "react-icons/fa";
-import { FaCircleDollarToSlot, FaClipboardQuestion } from "react-icons/fa6";
+import { FaClipboardQuestion } from "react-icons/fa6";
 import { FiMenu, FiUser } from "react-icons/fi";
 import { GiMusicalNotes } from "react-icons/gi";
 import { GrTransaction } from "react-icons/gr";
@@ -27,10 +27,10 @@ import { SiProducthunt } from "react-icons/si";
 import {
   TbEdit,
   TbMusicCode,
-  TbMusicDollar,
   TbMusicPlus,
   TbPasswordUser,
 } from "react-icons/tb";
+import { TfiRulerPencil } from "react-icons/tfi";
 import { toast } from "sonner";
 
 interface SidebarProps {
@@ -295,6 +295,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </li>
             <li>
               <Link
+                href="/size"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/size") ||
+                  isActive("/size/") ||
+                  pathname.startsWith("/size")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <TfiRulerPencil size={20} />
+                <span>Size</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/update-profile"
                 className={`flex items-center gap-3 p-2 rounded ${
                   isActive("/update-profile")
@@ -319,6 +334,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <span>Update Admin Password</span>
               </Link>
             </li>
+
             <li>
               <Link
                 href="/faq"
