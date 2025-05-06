@@ -242,7 +242,7 @@ export default function AlbumsPage() {
                   </div>
                   <div className="flex items-center mt-1 text-gray-600 dark:text-gray-300">
                     <FiDollarSign className="mr-1" />
-                    <span>{album.price.toFixed(2)}</span>
+                    <span>{Number(album.price).toFixed(2)}</span>
                     <span className="ml-2 text-sm">
                       • {album.songs.length} song
                       {album.songs.length !== 1 ? "s" : ""}

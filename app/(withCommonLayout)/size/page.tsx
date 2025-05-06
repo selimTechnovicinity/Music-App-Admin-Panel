@@ -117,7 +117,7 @@ export default function SizesPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
@@ -154,12 +154,12 @@ export default function SizesPage() {
                 >
                   Size Label
                 </th>
-                <th
+                {/* <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
                   Display Order
-                </th>
+                </th> */}
                 <th
                   scope="col"
                   className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
@@ -179,9 +179,9 @@ export default function SizesPage() {
                       {size.label}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2">
-                      {/* <button
+                  {/* <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-2"> */}
+                  {/* <button
                         onClick={() => moveSizeOrder(size._id, "up")}
                         disabled={index === 0}
                         className={`p-1 rounded ${
@@ -192,10 +192,10 @@ export default function SizesPage() {
                       >
                         <FiArrowUp />
                       </button> */}
-                      <span className="text-sm text-gray-900 dark:text-white">
+                  {/* <span className="text-sm text-gray-900 dark:text-white">
                         {size.displayOrder}
-                      </span>
-                      {/* <button
+                      </span> */}
+                  {/* <button
                         onClick={() => moveSizeOrder(size._id, "down")}
                         disabled={index === sizes.length - 1}
                         className={`p-1 rounded ${
@@ -206,8 +206,8 @@ export default function SizesPage() {
                       >
                         <FiArrowDown />
                       </button> */}
-                    </div>
-                  </td>
+                  {/* </div>
+                  </td> */}
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={() => openEditModal(size)}
@@ -312,7 +312,7 @@ export default function SizesPage() {
                     required
                   />
                 </div>
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <label
                     htmlFor="displayOrder"
                     className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
@@ -328,7 +328,7 @@ export default function SizesPage() {
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                     required
                   />
-                </div>
+                </div> */}
                 <div className="flex justify-end gap-2 pt-4">
                   <button
                     type="button"

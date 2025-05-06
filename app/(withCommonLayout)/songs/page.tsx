@@ -44,7 +44,7 @@ export default function SongsPage() {
 
   const fetchSongs = async () => {
     try {
-      const response = await API.post("/songs/all", {
+      const response = await API.post("/songs/users/all", {
         page: pageNo,
         limit: limit,
         search: searchQuery,
@@ -67,7 +67,6 @@ export default function SongsPage() {
       console.error("Failed to update song status:", error);
     }
   };
-
 
   const handleNext = () => {
     if (pageNo < totalPages) setPageNo((prev) => prev + 1);

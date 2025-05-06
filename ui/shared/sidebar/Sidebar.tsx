@@ -4,31 +4,25 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
-import { BsEnvelopeOpenHeart, BsPostcardFill } from "react-icons/bs";
-import { CiTextAlignJustify } from "react-icons/ci";
+import { BsPostcardFill } from "react-icons/bs";
 import {
   FaClipboardList,
   FaHeadphonesAlt,
   FaMicrophoneAlt,
   FaPercent,
 } from "react-icons/fa";
-import { FaClipboardQuestion } from "react-icons/fa6";
 import { FiMenu, FiUser } from "react-icons/fi";
 import { GiMusicalNotes } from "react-icons/gi";
 import { GrTransaction } from "react-icons/gr";
 import { IoSettings } from "react-icons/io5";
-import {
-  MdOutlineLanguage,
-  MdOutlineLibraryMusic,
-  MdPrivacyTip,
-} from "react-icons/md";
+import { MdOutlineLanguage, MdOutlineLibraryMusic } from "react-icons/md";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { SiProducthunt } from "react-icons/si";
 import {
+  TbClockExclamation,
   TbEdit,
   TbMusicCode,
   TbMusicPlus,
-  TbPasswordUser,
 } from "react-icons/tb";
 import { TfiRulerPencil } from "react-icons/tfi";
 import { toast } from "sonner";
@@ -114,6 +108,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
               >
                 <GrTransaction size={20} />
                 <span>Transactions</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/pending-withdraw"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/pending-withdraw") ||
+                  isActive("/pending-withdraw/") ||
+                  pathname.startsWith("/pending-withdraw")
+                    ? "bg-blue-700"
+                    : "hover:bg-blue-700"
+                }`}
+              >
+                <TbClockExclamation size={20} />
+                <span>Pending Withdraw</span>
               </Link>
             </li>
             <li>
@@ -321,7 +330,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <span>Update Admin</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/update-password"
                 className={`flex items-center gap-3 p-2 rounded ${
@@ -394,7 +403,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <BsEnvelopeOpenHeart size={20} />
                 <span>Messages</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 href="/set-commissions"

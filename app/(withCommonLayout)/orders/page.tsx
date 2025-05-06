@@ -44,13 +44,22 @@ interface Status {
 
 interface Order {
   _id: string;
-  userId: string;
+  userId: {
+    _id: string;
+    name: string;
+    photo: string;
+  };
   items: OrderItem[];
   totalAmount: number;
   addressId: Address;
   status: Status;
   orderedAt: string;
   createdAt: string;
+  musicianId: {
+    _id: string;
+    name: string;
+    photo: string;
+  };
 }
 
 export default function OrdersPage() {
@@ -173,7 +182,7 @@ export default function OrdersPage() {
         {orders.map((order) => (
           <div
             key={order._id}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden"
+            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-300 overflow-hidden"
           >
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
@@ -184,6 +193,29 @@ export default function OrdersPage() {
                   <div className="flex items-center mt-1 text-gray-600 dark:text-gray-300">
                     <FiCalendar className="mr-2" />
                     <span>{formatDate(order.orderedAt)}</span>
+                  </div>
+                  {/* User and Musician Info */}
+                  <div className="flex flex-wrap gap-4 mt-3">
+                    <div className="flex items-center">
+                      <img
+                        src={order.userId.photo}
+                        alt={order.userId.name}
+                        className="w-8 h-8 rounded-full mr-2"
+                      />
+                      <span className="text-sm">
+                        Customer: {order.userId.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <img
+                        src={order.musicianId.photo}
+                        alt={order.musicianId.name}
+                        className="w-8 h-8 rounded-full mr-2"
+                      />
+                      <span className="text-sm">
+                        Artist: {order.musicianId.name}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
