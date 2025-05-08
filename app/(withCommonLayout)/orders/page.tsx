@@ -84,6 +84,7 @@ export default function OrdersPage() {
         sort: sortOption,
         page: pageNo,
       });
+      console.log(response.data.data.orders);
       setOrders(response.data.data.orders);
       setTotalPages(response.data.data.totalPages);
     } catch (error) {
@@ -198,7 +199,7 @@ export default function OrdersPage() {
                   <div className="flex flex-wrap gap-4 mt-3">
                     <div className="flex items-center">
                       <img
-                        src={order.userId.photo}
+                        src={order?.userId?.photo}
                         alt={order.userId.name}
                         className="w-8 h-8 rounded-full mr-2"
                       />
@@ -208,7 +209,7 @@ export default function OrdersPage() {
                     </div>
                     <div className="flex items-center">
                       <img
-                        src={order.musicianId.photo}
+                        src={order.musicianId?.photo}
                         alt={order.musicianId.name}
                         className="w-8 h-8 rounded-full mr-2"
                       />
@@ -252,19 +253,19 @@ export default function OrdersPage() {
                       <div className="flex-shrink-0">
                         <img
                           src={
-                            item.itemId.images[0] ||
+                            item.itemId?.images[0] ||
                             "https://via.placeholder.com/100"
                           }
-                          alt={item.itemId.title}
+                          alt={item.itemId?.title || "item"}
                           className="h-20 w-20 rounded-md object-cover"
                         />
                       </div>
                       <div>
                         <h5 className="font-medium text-gray-800 dark:text-white">
-                          {item.itemId.title}
+                          {item.itemId?.title}
                         </h5>
                         <p className="text-gray-600 dark:text-gray-300">
-                          {item.quantity} × ${item.itemId.price.toFixed(2)}
+                          {item.quantity} × ${item.itemId?.price.toFixed(2)}
                         </p>
                         {item.sizes.length > 0 && (
                           <div className="mt-1">
@@ -288,23 +289,23 @@ export default function OrdersPage() {
                 <div className="space-y-2 text-gray-600 dark:text-gray-300">
                   <div className="flex items-center">
                     <FiUser className="mr-2" />
-                    <span>{order.addressId.name}</span>
+                    <span>{order.addressId?.name}</span>
                   </div>
                   <div className="flex items-center">
                     <FiPhone className="mr-2" />
-                    <span>{order.addressId.phone}</span>
+                    <span>{order.addressId?.phone}</span>
                   </div>
                   <div className="flex items-start">
                     <FiHome className="mr-2 mt-1 flex-shrink-0" />
                     <span>
-                      {order.addressId.address_1}
+                      {order.addressId?.address_1}
                       {order.addressId.address_2 && (
-                        <>, {order.addressId.address_2}</>
+                        <>, {order.addressId?.address_2}</>
                       )}
                       <br />
-                      {order.addressId.state}, {order.addressId.country}
+                      {order.addressId?.state}, {order.addressId?.country}
                       <br />
-                      {order.addressId.pincode}
+                      {order.addressId?.pincode}
                     </span>
                   </div>
                 </div>
