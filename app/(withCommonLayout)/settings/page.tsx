@@ -7,18 +7,18 @@ import { FiGlobe, FiMail, FiPhone, FiSave, FiSettings } from "react-icons/fi";
 
 interface Settings {
   appName: string;
-  contactEmail: string;
-  contactPhone: string;
-  websiteUrl: string;
-  logoUrl?: string;
+  email: string;
+  phone: string;
+  website: string;
+  logo?: string;
 }
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<Settings>({
     appName: "",
-    contactEmail: "",
-    contactPhone: "",
-    websiteUrl: "",
+    email: "",
+    phone: "",
+    website: "",
   });
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,10 +32,10 @@ export default function SettingsPage() {
   const fetchSettings = async () => {
     setIsLoading(true);
     try {
-      const response = await API.get("/settings");
-      setSettings(response.data);
-      if (response.data.logoUrl) {
-        setLogoPreview(response.data.logoUrl);
+      const response = await API.get("/app-settings");
+      setSettings(response.data.data);
+      if (response.data.data.logo) {
+        setLogoPreview(response.data.data.logo);
       }
     } catch (error) {
       console.error("Failed to fetch settings:", error);
@@ -75,17 +75,18 @@ export default function SettingsPage() {
     try {
       const formData = new FormData();
       formData.append("appName", settings.appName);
-      formData.append("contactEmail", settings.contactEmail);
-      formData.append("contactPhone", settings.contactPhone);
-      formData.append("websiteUrl", settings.websiteUrl);
+      formData.append("email", settings.email);
+      formData.append("phone", settings.phone);
+      formData.append("website", settings.website);
 
       if (fileInputRef.current?.files?.[0]) {
         formData.append("logo", fileInputRef.current.files[0]);
       } else if (!logoPreview) {
         formData.append("removeLogo", "true");
       }
+      console.log(formData);
 
-      await API.post("/settings", formData, {
+      await API.post("/app-settings", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -206,16 +207,16 @@ export default function SettingsPage() {
               <FiMail className="text-gray-500 dark:text-gray-400 mr-3" />
               <div className="flex-grow">
                 <label
-                  htmlFor="contactEmail"
+                  htmlFor="email"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Email Address
                 </label>
                 <input
                   type="email"
-                  id="contactEmail"
-                  name="contactEmail"
-                  value={settings.contactEmail}
+                  id="email"
+                  name="email"
+                  value={settings.email}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   placeholder="contact@example.com"
@@ -227,16 +228,16 @@ export default function SettingsPage() {
               <FiPhone className="text-gray-500 dark:text-gray-400 mr-3" />
               <div className="flex-grow">
                 <label
-                  htmlFor="contactPhone"
+                  htmlFor="phone"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Phone Number
                 </label>
                 <input
                   type="tel"
-                  id="contactPhone"
-                  name="contactPhone"
-                  value={settings.contactPhone}
+                  id="phone"
+                  name="phone"
+                  value={settings.phone}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   placeholder="+1 (123) 456-7890"
@@ -248,16 +249,16 @@ export default function SettingsPage() {
               <FiGlobe className="text-gray-500 dark:text-gray-400 mr-3" />
               <div className="flex-grow">
                 <label
-                  htmlFor="websiteUrl"
+                  htmlFor="website"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                 >
                   Website URL
                 </label>
                 <input
                   type="url"
-                  id="websiteUrl"
-                  name="websiteUrl"
-                  value={settings.websiteUrl}
+                  id="website"
+                  name="website"
+                  value={settings.website}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   placeholder="https://example.com"

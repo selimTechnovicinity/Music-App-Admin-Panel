@@ -1,5 +1,341 @@
-const page = () => {
-  return <div className="flex items-center justify-center mt-50 text-3xl">Pending withdraw page is under development</div>;
-};
+"use client";
 
-export default page;
+import { useState, useEffect } from "react";
+import {
+  FiDollarSign,
+  FiClock,
+  FiCheck,
+  FiX,
+  FiRefreshCw,
+  FiSearch,
+} from "react-icons/fi";
+import API from "@/lib/axios-client";
+
+interface Withdrawal {
+  _id: string;
+  musicianId: {
+    _id: string;
+    name: string;
+    photo: string;
+  } | null;
+  amount: number;
+  status: "Completed" | "processing" | "failed" | "Rejected";
+  createdAt: string;
+  updatedAt: string;
+}
+
+export default function WithdrawalsPage() {
+  const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [pageNo, setPageNo] = useState(1);
+  const [limit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchWithdrawals();
+  }, [pageNo, searchQuery]);
+
+  const fetchWithdrawals = async () => {
+    try {
+      const response = await API.get(
+        `/withdrawals?page=${pageNo}&limit=${limit}&search=${searchQuery}`
+      );
+      setWithdrawals(response.data.data);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error("Failed to fetch withdrawals:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateWithdrawalStatus = async (id: string, status: string) => {
+    try {
+      await API.post(`/withdrawals/${id}`, { status });
+
+      fetchWithdrawals();
+    } catch (error) {
+      console.error("Failed to update withdrawal status:", error);
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Completed":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "processing":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      case "Rejected":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "Completed":
+        return <FiCheck className="mr-1" size={16} />;
+      case "Processing":
+        return <FiRefreshCw className="mr-1 animate-spin" size={16} />;
+      case "Failed":
+        return <FiX className="mr-1" size={16} />;
+      case "Rejected":
+        return <FiX className="mr-1" size={16} />;
+      default:
+        return <FiClock className="mr-1" size={16} />;
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const handleNext = () => {
+    if (pageNo < totalPages) setPageNo((prev) => prev + 1);
+  };
+
+  const handlePrev = () => {
+    if (pageNo > 1) setPageNo((prev) => prev - 1);
+  };
+
+  const handlePageClick = (page: number) => {
+    setPageNo(page);
+  };
+
+  const getPaginationNumbers = () => {
+    const pages = [];
+    const startPage = Math.max(1, pageNo - 2);
+    const endPage = Math.min(totalPages, pageNo + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto p-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            Withdrawal Requests
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage musician withdrawal requests
+          </p>
+        </div>
+
+        <div className="relative w-full md:w-96">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FiSearch className="text-gray-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search by musician name..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPageNo(1);
+            }}
+            className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+      </div>
+
+      {/* Withdrawals Table */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  From
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Amount
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Request Date
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              {withdrawals.map((withdrawal) => (
+                <tr
+                  key={withdrawal._id}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {withdrawal.musicianId ? (
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <img
+                            className="h-10 w-10 rounded-full"
+                            src={withdrawal.musicianId.photo}
+                            alt={withdrawal.musicianId.name}
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {withdrawal.musicianId.name}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        No musician
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center text-sm text-gray-900 dark:text-white">
+                      <FiDollarSign className="mr-1" />
+                      {withdrawal.amount.toFixed(2)}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
+                        withdrawal.status
+                      )}`}
+                    >
+                      {getStatusIcon(withdrawal.status)}
+                      {withdrawal.status.charAt(0).toUpperCase() +
+                        withdrawal.status.slice(1)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                    {formatDate(withdrawal.createdAt)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-right">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <select
+                          value={withdrawal.status}
+                          onChange={(e) =>
+                            updateWithdrawalStatus(
+                              withdrawal._id,
+                              e.target.value
+                            )
+                          }
+                          className="appearance-none pl-3 pr-8 py-1 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white bg-no-repeat"
+                          style={{
+                            backgroundImage:
+                              "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\")",
+                            backgroundPosition: "right 0.5rem center",
+                            backgroundSize: "1.5em 1.5em",
+                            paddingRight: "2rem",
+                          }}
+                        >
+                          <option value="processing">Processing</option>
+                          <option value="Completed">Completed</option>
+                          <option value="Rejected">Rejected</option>
+                        </select>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Empty State */}
+      {withdrawals.length === 0 && (
+        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
+          <FiDollarSign className="mx-auto text-4xl text-gray-400 mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+            No withdrawal requests found
+          </h3>
+          <p className="mt-1 text-gray-500 dark:text-gray-400">
+            {searchQuery
+              ? "Try a different search term"
+              : "There are currently no withdrawal requests"}
+          </p>
+        </div>
+      )}
+
+      {/* Pagination */}
+      {withdrawals.length > 0 && (
+        <div className="mt-8 flex justify-center gap-2">
+          <button
+            onClick={handlePrev}
+            disabled={pageNo === 1}
+            className={`px-4 py-2 rounded-full ${
+              pageNo === 1
+                ? "bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400 cursor-not-allowed"
+                : "bg-blue-950 dark:bg-blue-800 text-white hover:bg-blue-800 dark:hover:bg-blue-700 transition cursor-pointer"
+            }`}
+          >
+            Previous
+          </button>
+
+          {getPaginationNumbers().map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageClick(page)}
+              className={`px-4 py-2 rounded-full ${
+                pageNo === page
+                  ? "bg-blue-950 dark:bg-blue-800 text-white"
+                  : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition cursor-pointer"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            onClick={handleNext}
+            disabled={pageNo === totalPages}
+            className={`px-4 py-2 rounded-full ${
+              pageNo === totalPages
+                ? "bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400 cursor-not-allowed"
+                : "bg-blue-950 dark:bg-blue-800 text-white hover:bg-blue-800 dark:hover:bg-blue-700 transition cursor-pointer"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
