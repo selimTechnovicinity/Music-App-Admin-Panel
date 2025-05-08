@@ -124,38 +124,38 @@ export default function ProductsPage() {
 
       {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {products?.map((product) => (
           <div
             key={product._id}
             className={`bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden hover:shadow-md transition-shadow ${
-              product.isDeleted ? "opacity-70" : ""
+              product?.isDeleted ? "opacity-70" : ""
             }`}
           >
             <div className="relative aspect-square">
               <img
                 src={
-                  product.images?.[0] ||
-                  product.photos?.[0] ||
+                  product?.images?.[0] ||
+                  product?.photos?.[0] ||
                   "https://via.placeholder.com/300"
                 }
-                alt={product.title}
+                alt={product?.title}
                 className="w-full h-full object-cover"
               />
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  toggleProductStatus(product._id);
+                  toggleProductStatus(product?._id);
                 }}
                 className={`absolute flex top-2 right-2 items-center px-3 py-1 rounded-md ${
-                  !product.isDeleted
+                  !product?.isDeleted
                     ? "bg-green-400 dark:bg-green-900 text-green-800 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-800"
                     : "bg-red-400 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
                 } text-white shadow-md`}
                 title={
-                  !product.isDeleted ? "Disable product" : "Enable product"
+                  !product?.isDeleted ? "Disable product" : "Enable product"
                 }
               >
-                {!product.isDeleted ? (
+                {!product?.isDeleted ? (
                   <>
                     <FiEye className="mr-1" />
                     Hide
@@ -170,20 +170,20 @@ export default function ProductsPage() {
             </div>
             <div className="p-4">
               <h3 className="font-bold text-lg text-gray-800 dark:text-white mb-1 line-clamp-2">
-                {product.title}
+                {product?.title}
               </h3>
 
               <div className="flex justify-between items-center">
                 <div className="flex items-center text-gray-800 dark:text-white">
                   <FiDollarSign className="mr-1" />
                   <span className="font-medium">
-                    {product.price.toFixed(2)}
+                    {product?.price.toFixed(2)}
                   </span>
                 </div>
 
                 <div className="flex items-center text-gray-600 dark:text-gray-300">
                   <FiShoppingBag className="mr-1" />
-                  <span>{product.sell_count} sold</span>
+                  <span>{product?.sell_count} sold</span>
                 </div>
               </div>
 
@@ -191,7 +191,7 @@ export default function ProductsPage() {
                 Added: {formatDate(product.createdAt)}
               </div>
 
-              {product.isDeleted && (
+              {product?.isDeleted && (
                 <div className="mt-2 text-sm text-red-500 dark:text-red-400">
                   (Hidden from customers)
                 </div>
