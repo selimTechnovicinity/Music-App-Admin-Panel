@@ -84,7 +84,6 @@ export default function OrdersPage() {
         sort: sortOption,
         page: pageNo,
       });
-      console.log(response.data.data.orders);
       setOrders(response.data.data.orders);
       setTotalPages(response.data.data.totalPages);
     } catch (error) {
@@ -222,7 +221,7 @@ export default function OrdersPage() {
                 <div className="flex items-center gap-4">
                   <div className="flex items-center text-lg font-semibold">
                     <FiDollarSign className="mr-1" />
-                    <span>{order.totalAmount.toFixed(2)}</span>
+                    <span>{order?.totalAmount?.toFixed(2)}</span>
                   </div>
                   <select
                     value={order.status._id}

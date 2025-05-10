@@ -5,17 +5,23 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BiSolidDashboard } from "react-icons/bi";
 import { BsPostcardFill } from "react-icons/bs";
+import { CiTextAlignJustify } from "react-icons/ci";
 import {
   FaClipboardList,
   FaHeadphonesAlt,
   FaMicrophoneAlt,
   FaPercent,
 } from "react-icons/fa";
+import { FaClipboardQuestion } from "react-icons/fa6";
 import { FiMenu, FiUser } from "react-icons/fi";
 import { GiMusicalNotes } from "react-icons/gi";
 import { GrTransaction } from "react-icons/gr";
 import { IoSettings } from "react-icons/io5";
-import { MdOutlineLanguage, MdOutlineLibraryMusic } from "react-icons/md";
+import {
+  MdOutlineLanguage,
+  MdOutlineLibraryMusic,
+  MdPrivacyTip,
+} from "react-icons/md";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { SiProducthunt } from "react-icons/si";
 import {
@@ -269,6 +275,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </li>
             <li>
               <Link
+                href="/categories"
+                className={`flex items-center gap-3 p-2 rounded ${
+                  isActive("/categories") ? "bg-blue-700" : "hover:bg-blue-700"
+                }`}
+              >
+                <SiProducthunt size={20} />
+                <span>Categories</span>
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/orders"
                 className={`flex items-center gap-3 p-2 rounded ${
                   isActive("/orders") ? "bg-blue-700" : "hover:bg-blue-700"
@@ -342,7 +359,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <TbPasswordUser size={20} />
                 <span>Update Admin Password</span>
               </Link>
-            </li>
+            </li> */}
 
             <li>
               <Link
@@ -389,7 +406,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                 <span>Terms & Conditions</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 href="/messages"
                 className={`flex items-center gap-3 p-2 rounded ${

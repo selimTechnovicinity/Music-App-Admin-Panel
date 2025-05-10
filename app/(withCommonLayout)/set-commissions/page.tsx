@@ -12,16 +12,16 @@ import {
 } from "react-icons/fi";
 
 interface CommissionRates {
-  productPurchase: number;
-  songPurchase: number;
-  donation: number;
+  product_commission: number;
+  song_commission: number;
+  donation_commission: number;
 }
 
 export default function CommissionPage() {
   const [commissions, setCommissions] = useState<CommissionRates>({
-    productPurchase: 0,
-    songPurchase: 0,
-    donation: 0,
+    product_commission: 0,
+    song_commission: 0,
+    donation_commission: 0,
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ export default function CommissionPage() {
     setIsLoading(true);
     try {
       const response = await API.get("/commissions");
-      setCommissions(response.data);
+      setCommissions(response.data.data);
     } catch (error) {
       console.error("Failed to fetch commissions:", error);
     } finally {
@@ -53,7 +53,7 @@ export default function CommissionPage() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      await API.put("/commissions", commissions);
+      await API.post("/commissions", commissions);
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to save commissions:", error);
@@ -151,8 +151,8 @@ export default function CommissionPage() {
               <div className="relative rounded-md shadow-sm w-32">
                 <input
                   type="number"
-                  name="productPurchase"
-                  value={commissions.productPurchase}
+                  name="product_commission"
+                  value={commissions.product_commission}
                   onChange={handleInputChange}
                   min="0"
                   max="100"
@@ -164,7 +164,7 @@ export default function CommissionPage() {
               </div>
             ) : (
               <div className="text-2xl font-bold text-gray-800 dark:text-white">
-                {commissions.productPurchase}%
+                {commissions.product_commission}%
               </div>
             )}
           </div>
@@ -190,8 +190,8 @@ export default function CommissionPage() {
               <div className="relative rounded-md shadow-sm w-32">
                 <input
                   type="number"
-                  name="songPurchase"
-                  value={commissions.songPurchase}
+                  name="song_commission"
+                  value={commissions.song_commission}
                   onChange={handleInputChange}
                   min="0"
                   max="100"
@@ -203,7 +203,7 @@ export default function CommissionPage() {
               </div>
             ) : (
               <div className="text-2xl font-bold text-gray-800 dark:text-white">
-                {commissions.songPurchase}%
+                {commissions.song_commission}%
               </div>
             )}
           </div>
@@ -229,8 +229,8 @@ export default function CommissionPage() {
               <div className="relative rounded-md shadow-sm w-32">
                 <input
                   type="number"
-                  name="donation"
-                  value={commissions.donation}
+                  name="donation_commission"
+                  value={commissions.donation_commission}
                   onChange={handleInputChange}
                   min="0"
                   max="100"
@@ -242,7 +242,7 @@ export default function CommissionPage() {
               </div>
             ) : (
               <div className="text-2xl font-bold text-gray-800 dark:text-white">
-                {commissions.donation}%
+                {commissions.donation_commission}%
               </div>
             )}
           </div>

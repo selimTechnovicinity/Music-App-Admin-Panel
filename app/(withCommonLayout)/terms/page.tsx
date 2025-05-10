@@ -58,7 +58,7 @@ const TermsPage = () => {
             editor.commands.setContent(markdown);
           }
         } else {
-          toast.error("Impossibile recuperare i dati.");
+          toast.error("Failed to fetch terms data.");
         }
       } catch (error) {
         toast.error(error as string);
@@ -83,7 +83,7 @@ const TermsPage = () => {
           </h1>
           <Link href="/terms/create">
             <button className="bg-blue-950 dark:bg-blue-700 text-white mb-3 px-4 py-2 rounded cursor-pointer transition hover:bg-blue-800 dark:hover:bg-blue-600">
-              Modifica
+              Edit
             </button>
           </Link>
           <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm">
