@@ -64,7 +64,7 @@ const CreateTermsPage = () => {
             editor.commands.setContent(markdown);
           }
         } else {
-          toast({ title: "Impossibile recuperare i dati." });
+          toast({ title: "Failed to fetch terms data" });
         }
       } catch (error) {
         toast({ title: error as string });
@@ -90,7 +90,7 @@ const CreateTermsPage = () => {
         toast({ title: res?.message });
         router.push("/terms");
       } else {
-        toast({ title: "Aggiornamento fallito." });
+        toast({ title: "Failed to update terms" });
       }
     } catch (error) {
       toast({ title: error as string });
@@ -101,7 +101,7 @@ const CreateTermsPage = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="max-w-3xl w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">
-          Modifica dei termini e delle condizioni
+          {title || "Update Terms and Conditions"}
         </h1>
 
         <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm">
@@ -171,7 +171,7 @@ const CreateTermsPage = () => {
             onClick={handleSubmit}
             className="bg-blue-950 text-white px-4 py-2 rounded cursor-pointer transition hover:bg-blue-800 dark:hover:bg-blue-700"
           >
-            Invia
+           Submit
           </button>
         </div>
       </div>

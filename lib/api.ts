@@ -106,80 +106,80 @@ export const updateUserById = async (id: string, formData: TUpdateData) => {
 };
 
 export const createPrivacy = async (privacyData: PrivacyData) => {
-  const res = await API.post(`/additionals/privacy_policy`, privacyData);
+  const res = await API.post(`/additonals/privacy_policy`, privacyData);
   const result = await res.data;
   return result;
 };
 
 export const createTerms = async (privacyData: PrivacyData) => {
-  const res = await API.post(`/additionals/terms_conditions`, privacyData);
+  const res = await API.post(`/additonals/terms_conditions`, privacyData);
   const result = await res.data;
   return result;
 };
 
 export const createFAQ = async (updatedFaqData: FAQData) => {
-  const res = await API.post(`/additionals/faq`, updatedFaqData);
+  const res = await API.post(`/additonals/faq`, updatedFaqData);
   const result = await res.data;
   return result;
 };
 
 export const updateFAQById = async (id: string, faqData: UpdateFAQData) => {
-  const res = await API.patch(`/additionals/faq/${id}`, faqData);
+  const res = await API.put(`/additonals/faq/${id}`, faqData);
   const result = await res.data;
   return result;
 };
 
 export const getPrivacy = async () => {
-  const res = await API.get(`/additionals/privacy_policy`);
+  const res = await API.get(`/additonals/privacy_policy`);
   const result = await res.data;
   return result;
 };
 
 export const getTerms = async () => {
-  const res = await API.get(`/additionals/terms_conditions`);
+  const res = await API.get(`/additonals/terms_conditions`);
   const result = await res.data;
   return result;
 };
 
 export const getFAQ = async () => {
-  const res = await API.get(`/additionals/faq`);
-  const result = await res.data;
+  const res = await API.get(`/additonals/faq`);
+  const result = res.data;
   return result;
 };
 
 export const getPrivacyById = async (id: string) => {
-  const res = await API.get(`/additionals/privacy_policy/${id}`);
-  const result = await res.data;
+  const res = await API.get(`/additonals/privacy_policy/${id}`);
+  const result = res.data;
   return result;
 };
 
 export const getTermsById = async (id: string) => {
-  const res = await API.get(`/additionals/terms_conditions/${id}`);
-  const result = await res.data;
+  const res = await API.get(`/additonals/terms_conditions/${id}`);
+  const result = res.data;
   return result;
 };
 
 export const getFAQById = async (id: string) => {
-  const res = await API.get(`/additionals/faq/${id}`);
-  const result = await res.data;
+  const res = await API.get(`/additonals/faq/${id}`);
+  const result = res.data;
   return result;
 };
 
 export const deleteFAQById = async (id: string) => {
-  const res = await API.delete(`/additionals/faq/${id}`);
-  const result = await res.data;
+  const res = await API.delete(`/additonals/faq/${id}`);
+  const result = res.data;
   return result;
 };
 
 export const getContacts = async () => {
   const res = await API.get(`/contacts`);
-  const result = await res.data;
+  const result = res.data;
   return result;
 };
 
 export const getContactsById = async (id: string) => {
   const res = await API.get(`/contacts/${id}`);
-  const result = await res.data;
+  const result = res.data;
   return result;
 };
 
@@ -188,20 +188,20 @@ export const getContactsById = async (id: string) => {
 export const forgetPassword = async (email: { email: string }) => {
   const res = await API.post(`/auth/forget-password`, email);
 
-  const result = await res.data;
+  const result = res.data;
   return result;
 };
 
 export const submitOTP = async (otpData: { otp: string; email: string }) => {
   const res = await API.post(`/auth/forget-password/verify-otp`, otpData);
 
-  const result = await res.data;
+  const result = res.data;
   return result;
 };
 
 export const resetPassword = async (formData: TResetPasswordData) => {
   const res = await API.post(`/auth/reset-password`, formData);
-  const result = await res.data;
+  const result = res.data;
 
   return result;
 };

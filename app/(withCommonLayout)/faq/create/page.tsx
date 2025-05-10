@@ -27,7 +27,7 @@ const EditPrivacyPolicy = () => {
         if (response?.page?.body) {
           setFaqData(response?.page?.body);
         } else {
-          toast({ title: "Nessun dato trovato" });
+          toast({ title: "No FAQ data found" });
         }
       } catch (error) {
         toast({ title: error as string });
@@ -55,7 +55,7 @@ const EditPrivacyPolicy = () => {
         toast({ title: res?.message });
         router.push("/faq");
       } else {
-        toast({ title: "Impossibile aggiungere nuovi dati." });
+        toast({ title: "Failed to create FAQ" });
       }
     } catch (error) {
       toast({ title: error as string });
@@ -66,7 +66,7 @@ const EditPrivacyPolicy = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="max-w-3xl w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
         <h1 className="text-3xl font-bold mb-6 text-center text-gray-800 dark:text-white">
-          Aggiungi nuovo
+          Create New FAQ
         </h1>
 
         <div className="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm">
@@ -76,14 +76,14 @@ const EditPrivacyPolicy = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full p-2 mb-2  rounded  bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100"
-            placeholder="Domanda"
+            placeholder="Question"
           />
           <textarea
             value={content}
             required
             onChange={(e) => setContent(e.target.value)}
             className="w-full p-2 mb-2  rounded  bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100"
-            placeholder="Risposta"
+            placeholder="Answer"
             rows={4}
           />
         </div>
@@ -93,7 +93,7 @@ const EditPrivacyPolicy = () => {
             onClick={handleSubmit}
             className="bg-blue-950 dark:bg-blue-700 text-white px-4 py-2 rounded cursor-pointer transition hover:bg-blue-800 dark:hover:bg-blue-600"
           >
-            Invia
+            Submit
           </button>
         </div>
       </div>
