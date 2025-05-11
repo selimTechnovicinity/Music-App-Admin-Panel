@@ -82,11 +82,11 @@ const Users = () => {
   return (
     <main className="my-10 mx-auto w-full max-w-6xl px-4">
       <div className="flex justify-end mr-5">
-        <Link href="/operators/create">
+        {/* <Link href="/users/create">
           <button className="bg-blue-950 dark:bg-blue-800 text-white px-4 py-2 rounded-lg transition hover:bg-blue-800 dark:hover:bg-blue-700">
             + Add new user
           </button>
-        </Link>
+        </Link> */}
       </div>
       {error ? (
         <p className="ml-40 text-center font-bold mt-40 bg-red-600 w-200 p-5 text-white">

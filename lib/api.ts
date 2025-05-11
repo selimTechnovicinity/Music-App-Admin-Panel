@@ -64,7 +64,7 @@ export const getUser = async () => {
   return res.data;
 };
 export const getUserById = async (id: string) => {
-  const res = await API.get(`/users/user/${id}`);
+  const res = await API.get(`/users/musician/${id}`);
 
   return res.data;
 };
@@ -100,7 +100,7 @@ export const userRegister = async (formData: TRegisterData) => {
 };
 
 export const updateUserById = async (id: string, formData: TUpdateData) => {
-  const res = await API.patch(`/users/${id}`, formData);
+  const res = await API.patch(`/users/admin/${id}`, formData);
   const result = await res.data;
   return result;
 };

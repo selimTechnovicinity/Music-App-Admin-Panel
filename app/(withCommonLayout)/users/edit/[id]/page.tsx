@@ -38,7 +38,8 @@ const EditUser = () => {
     const fetchUserData = async () => {
       try {
         const response = await getUserById(id as string);
-        const userData = response?.data?.user;
+        // console.log(response)
+        const userData = response?.data || "";
         if (userData) {
           // setFormData(userData);
           setUserData(userData);
@@ -71,7 +72,7 @@ const EditUser = () => {
       const res = await updateUserById(id as string, formData);
       if (res?.status === "success") {
         toast.success(res?.message || "Update successful");
-        router.push("/operators");
+        router.push("/users");
       } else {
         setError(res?.message);
         toast.success(res?.message);
@@ -133,7 +134,8 @@ const EditUser = () => {
             <strong>Role:</strong> {userData?.role || "N/A"}
           </div>
           <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-            <strong>Status:</strong> {userData?.isActive ? "Active" : "Inactive"}
+            <strong>Status:</strong>{" "}
+            {userData?.isActive ? "Active" : "Inactive"}
           </div>
 
           {error && (

@@ -80,11 +80,11 @@ const Users = () => {
   return (
     <main className="my-10 mx-auto w-full max-w-6xl px-4">
       <div className="flex justify-end mr-5">
-        <Link href="/musicians/create">
+        {/* <Link href="/musicians/create">
           <button className="bg-blue-950 dark:bg-blue-800 cursor-pointer text-white px-4 py-2 rounded-lg transition hover:bg-blue-800 dark:hover:bg-blue-700">
             + Add new musician
           </button>
-        </Link>
+        </Link> */}
       </div>
       {error ? (
         <p className="ml-40 text-center font-bold mt-40 bg-red-600 w-200 p-5 text-white">
@@ -149,7 +149,7 @@ const Users = () => {
                         </button>
                       </td>
                       <td className="p-3 flex space-x-2">
-                        <Link href={`/users/edit/${user?._id}`}>
+                        <Link href={`/musicians/edit/${user?._id}`}>
                           <button className="cursor-pointer text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition">
                             <FaEdit />
                           </button>

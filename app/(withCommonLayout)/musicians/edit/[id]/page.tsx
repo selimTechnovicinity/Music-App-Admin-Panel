@@ -38,7 +38,8 @@ const EditUser = () => {
     const fetchUserData = async () => {
       try {
         const response = await getUserById(id as string);
-        const userData = response?.data?.user;
+        console.log(response.data);
+        const userData = response?.data || "";
         if (userData) {
           // setFormData(userData);
           setUserData(userData);
@@ -71,7 +72,7 @@ const EditUser = () => {
       const res = await updateUserById(id as string, formData);
       if (res?.status === "success") {
         toast({ title: "Update successfull" });
-        router.push("/restaurants");
+        router.push("/musicians");
       } else {
         setError(res?.message);
         toast(res?.message);
@@ -88,7 +89,7 @@ const EditUser = () => {
     <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-200">
-          Modifica Ristorante
+          Edit Musicians
         </h2>
         <form onSubmit={handleUpdate}>
           <div className="mb-4">
