@@ -51,7 +51,7 @@ const EditUser = () => {
           toast({ title: "Failed to load user data." });
         }
       } catch (err) {
-        toast({ title: "Error loading user data" });
+        toast({ title: (err as string) || "Error loading user data" });
       }
     };
 
