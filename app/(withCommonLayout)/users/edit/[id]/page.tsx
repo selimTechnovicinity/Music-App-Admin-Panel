@@ -1,9 +1,9 @@
 "use client";
+import { toast } from "@/hooks/use-toast";
 import { getUserById, updateUserById } from "@/lib/api";
 import { Loader2 } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export type TUpdateData = {
   name?: string;
@@ -13,24 +13,26 @@ export type TUpdateData = {
   isActive?: boolean;
   id?: string;
   __v?: number;
+  photo?: string | null;
+  bio?: string | null;
+  genres?: string[];
+  isVerified?: boolean;
+  country?: string | null;
+  total_earning?: number;
+  total_latest_earning?: number;
+  total_song_earning?: number;
+  total_product_earning?: number;
+  total_donation_earning?: number;
 };
 
 const EditUser = () => {
   const { id } = useParams();
 
-  const router = useRouter();
-
   const [formData, setFormData] = useState<TUpdateData>({
     name: "",
-    email: "",
     phone: "",
   });
-  const [userData, setUserData] = useState<TUpdateData>({
-    name: "",
-    email: "",
-    phone: "",
-  });
-
+  const [userData, setUserData] = useState<TUpdateData>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -38,24 +40,23 @@ const EditUser = () => {
     const fetchUserData = async () => {
       try {
         const response = await getUserById(id as string);
-        // console.log(response)
-        const userData = response?.data || "";
+        const userData = response?.data || {};
         if (userData) {
-          // setFormData(userData);
           setUserData(userData);
-          formData.name = userData?.name;
-          formData.email = userData?.email;
-          formData.phone = userData?.phone;
+          setFormData({
+            name: userData.name || "",
+            // phone: userData.phone || "",
+          });
         } else {
-          toast.error("Failed to fetch user data");
+          toast({ title: "Failed to load user data." });
         }
       } catch (err) {
-        toast.error(err as string);
+        toast({ title: "Error loading user data" });
       }
     };
 
     fetchUserData();
-  }, [router, id]);
+  }, [id]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -70,16 +71,10 @@ const EditUser = () => {
 
     try {
       const res = await updateUserById(id as string, formData);
-      if (res?.status === "success") {
-        toast.success(res?.message || "Update successful");
-        router.push("/users");
-      } else {
-        setError(res?.message);
-        toast.success(res?.message);
-      }
+      toast({ title: res?.message || "User updated successfully." });
     } catch (error) {
       setError(error as string);
-      toast.error(error as string);
+      toast({ title: error as string });
     } finally {
       setLoading(false);
     }
@@ -88,7 +83,7 @@ const EditUser = () => {
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100 dark:bg-gray-900">
       <div className="w-full max-w-md p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">
+        <h2 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-200">
           Edit User
         </h2>
         <form onSubmit={handleUpdate}>
@@ -103,13 +98,15 @@ const EditUser = () => {
               type="text"
               id="name"
               name="name"
+              aria-label="Name"
               placeholder="Name"
-              className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+              className="w-full p-2 border dark:border-none rounded-md dark:bg-gray-700 dark:text-gray-200"
               value={formData?.name || ""}
               onChange={handleChange}
             />
           </div>
-          <div className="mb-4">
+
+          {/* <div className="mb-4">
             <label
               htmlFor="phone"
               className="block text-gray-700 dark:text-gray-300 font-semibold mb-1"
@@ -118,35 +115,64 @@ const EditUser = () => {
             </label>
             <input
               type="text"
+              id="phone"
               name="phone"
+              aria-label="Phone Number"
               placeholder="Phone Number"
-              className="w-full p-2 mt-2 border rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600"
+              className="w-full p-2 border dark:border-none rounded-md dark:bg-gray-700 dark:text-gray-200"
               value={formData?.phone || ""}
               onChange={handleChange}
             />
+          </div> */}
+
+          {/* Display all user data as non-editable */}
+          <div className="space-y-2 mt-4">
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Email:</strong> {userData?.email || "N/A"}
+            </div>
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Role:</strong> {userData?.role || "N/A"}
+            </div>
+            {/* <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Status:</strong>{" "}
+              {userData?.isActive ? "Active" : "Inactive"}
+            </div> */}
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Verified:</strong> {userData?.isVerified ? "Yes" : "No"}
+            </div>
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Bio:</strong> {userData?.bio || "N/A"}
+            </div>
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Country:</strong> {userData?.country || "N/A"}
+            </div>
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Total Earnings:</strong> $
+              {userData?.total_earning?.toFixed(2) || "0.00"}
+            </div>
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Latest Earnings:</strong> $
+              {userData?.total_latest_earning?.toFixed(2) || "0.00"}
+            </div>
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Song Earnings:</strong> $
+              {userData?.total_song_earning?.toFixed(2) || "0.00"}
+            </div>
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Product Earnings:</strong> $
+              {userData?.total_product_earning?.toFixed(2) || "0.00"}
+            </div>
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+              <strong>Donation Earnings:</strong> $
+              {userData?.total_donation_earning?.toFixed(2) || "0.00"}
+            </div>
           </div>
 
-          {/* Display additional user data as non-editable */}
-          <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-            <strong>Email:</strong> {userData?.email || "N/A"}
-          </div>
-          <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-            <strong>Role:</strong> {userData?.role || "N/A"}
-          </div>
-          <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-            <strong>Status:</strong>{" "}
-            {userData?.isActive ? "Active" : "Inactive"}
-          </div>
-
-          {error && (
-            <p className="text-red-600 dark:text-red-400 mt-2 text-center">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-red-600 mt-2 text-center">{error}</p>}
 
           <button
             type="submit"
-            className={`w-full p-2 mt-4 bg-blue-950 dark:bg-blue-800 text-white rounded-md cursor-pointer flex items-center justify-center ${
+            className={`w-full p-2 mt-4 bg-blue-950 text-white rounded-md cursor-pointer flex items-center justify-center ${
               loading ? "opacity-75 cursor-not-allowed" : ""
             }`}
             disabled={loading}

@@ -3,7 +3,7 @@
 import API from "@/lib/axios-client";
 import {
   DollarSign,
-  Download,
+  Headphones,
   Mic2,
   Music,
   Radio,
@@ -12,17 +12,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-// import {
-//   Cell,
-//   Line,
-//   LineChart,
-//   Pie,
-//   PieChart,
-//   ResponsiveContainer,
-//   Tooltip,
-//   XAxis,
-//   YAxis,
-// } from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 // Summary Card Component
 const SummaryCard = ({
@@ -136,39 +126,39 @@ const ActivityItem = ({
 //   { month: "Jun", revenue: 2390, users: 3800 },
 // ];
 
-// const genreData = [
-//   { name: "Pop", value: 35 },
-//   { name: "Rock", value: 25 },
-//   { name: "Hip Hop", value: 20 },
-//   { name: "Electronic", value: 15 },
-//   { name: "R&B", value: 5 },
-// ];
-
-// const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
-
-const withdrawalRequests = [
-  {
-    id: 1,
-    artist: "John Doe",
-    amount: "$1,250",
-    date: "Today",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    artist: "Jane Smith",
-    amount: "$850",
-    date: "Yesterday",
-    status: "Approved",
-  },
-  {
-    id: 3,
-    artist: "Mike Johnson",
-    amount: "$2,100",
-    date: "2 days ago",
-    status: "Pending",
-  },
+const genreData = [
+  { name: "Pop", value: 35 },
+  { name: "Rock", value: 25 },
+  { name: "Hip Hop", value: 20 },
+  { name: "Electronic", value: 15 },
+  { name: "R&B", value: 5 },
 ];
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+
+// const withdrawalRequests = [
+//   {
+//     id: 1,
+//     artist: "John Doe",
+//     amount: "$1,250",
+//     date: "Today",
+//     status: "Pending",
+//   },
+//   {
+//     id: 2,
+//     artist: "Jane Smith",
+//     amount: "$850",
+//     date: "Yesterday",
+//     status: "Approved",
+//   },
+//   {
+//     id: 3,
+//     artist: "Mike Johnson",
+//     amount: "$2,100",
+//     date: "2 days ago",
+//     status: "Pending",
+//   },
+// ];
 
 export default function Dashboard() {
   const [dashboardData, setDashboardData] = useState({
@@ -186,9 +176,31 @@ export default function Dashboard() {
     totalRevenue: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [genreData, setGenreData] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
+  }, []);
+
+  useEffect(() => {
+    const fetchGenreData = async () => {
+      try {
+        const res = await API.get("/genres/song-count");
+        if (res.data.success) {
+          const transformed = res.data.data.map(
+            (genre: { genre_name: string; songCount: number }) => ({
+              name: genre.genre_name,
+              value: genre.songCount,
+            })
+          );
+          setGenreData(transformed);
+        }
+      } catch (error) {
+        console.error("Failed to fetch genre data", error);
+      }
+    };
+
+    fetchGenreData();
   }, []);
 
   const fetchDashboardData = async () => {
@@ -217,19 +229,16 @@ export default function Dashboard() {
         <SummaryCard
           title="Total Users"
           value={dashboardData.totalUsers.toLocaleString()}
-          change="+12%"
           icon={<User className="h-6 w-6 text-blue-500" />}
         />
         <SummaryCard
           title="Total Artists"
           value={dashboardData.totalMusicians.toLocaleString()}
-          change="+5%"
           icon={<Mic2 className="h-6 w-6 text-blue-500" />}
         />
         <SummaryCard
           title="Songs Uploaded"
           value={dashboardData.totalSongs.toLocaleString()}
-          change="+8%"
           icon={<Music className="h-6 w-6 text-blue-500" />}
         />
         <SummaryCard
@@ -283,7 +292,7 @@ export default function Dashboard() {
         <SummaryCard
           title="Total Revenue"
           value={`$${dashboardData.totalRevenue.toLocaleString()}`}
-          change="+22%"
+          // change="+22%"
           icon={<DollarSign className="h-6 w-6 text-emerald-500" />}
         />
       </div>
@@ -322,11 +331,11 @@ export default function Dashboard() {
         </div> */}
 
         {/* Genre Distribution Pie Chart */}
-        {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div className="h-64">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Headphones className="h-5 w-5 text-purple-500" /> Music Genre
-              Distribution
+              <Headphones className="h-5 w-5 text-purple-500" />
+              Music Genre Distribution
             </h2>
             <ResponsiveContainer width="100%" height="90%">
               <PieChart>
@@ -354,13 +363,13 @@ export default function Dashboard() {
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </div> */}
+        </div>
       </div>
 
       {/* Detailed Lists Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Withdrawal Requests */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div>
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Wallet className="h-5 w-5 text-amber-500" /> Pending Withdrawals
@@ -398,10 +407,10 @@ export default function Dashboard() {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Most Played Songs */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div>
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Music className="h-5 w-5 text-green-500" /> Top Trending Songs
@@ -419,10 +428,10 @@ export default function Dashboard() {
               <SongItem rank={5} name="Bad Habits" plays="3.5M" change="+5%" />
             </ul>
           </div>
-        </div>
+        </div> */}
 
         {/* Top Artists */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div>
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
               <Mic2 className="h-5 w-5 text-purple-500" /> Top Earning Artists
@@ -435,11 +444,11 @@ export default function Dashboard() {
               <ArtistItem name="BTS" earnings="$65,300" songs="95" />
             </ul>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Recent Activity Section */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
         <div>
           <h2 className="text-lg font-semibold mb-4">
             Recent Platform Activity
@@ -467,22 +476,12 @@ export default function Dashboard() {
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Export Section */}
-      <div className="flex justify-between mt-6">
-        <div className="text-sm text-gray-500 dark:text-gray-400">
+      <div className="flex justify-center mt-6 bg-white p-2 rounded-md">
+        <div className="text-2xl font-bold text-blue-950 dark:text-gray-400">
           Last updated: {new Date().toLocaleString()}
-        </div>
-        <div className="flex gap-4">
-          <button className="flex items-center gap-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-lg shadow hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-            <Download className="h-5 w-5" />
-            Download CSV
-          </button>
-          <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
-            <Download className="h-5 w-5" />
-            Full Report PDF
-          </button>
         </div>
       </div>
     </div>

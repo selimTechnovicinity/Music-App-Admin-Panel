@@ -121,7 +121,7 @@ const EditUser = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label
                 htmlFor="phone"
                 className="block text-gray-700 dark:text-gray-300 font-semibold mb-1"
@@ -137,7 +137,7 @@ const EditUser = () => {
                 value={formData.phone}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
 
             <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
               <strong>Email:</strong> {data?.data?.email || "N/A"}

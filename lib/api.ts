@@ -100,7 +100,7 @@ export const userRegister = async (formData: TRegisterData) => {
 };
 
 export const updateUserById = async (id: string, formData: TUpdateData) => {
-  const res = await API.patch(`/users/admin/${id}`, formData);
+  const res = await API.post(`/users/admin/${id}`, formData);
   const result = await res.data;
   return result;
 };
