@@ -229,37 +229,6 @@ export default function Dashboard() {
       {/* Detailed Lists Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6"></div>
 
-      {/* Recent Activity Section */}
-      {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-        <div>
-          <h2 className="text-lg font-semibold mb-4">
-            Recent Platform Activity
-          </h2>
-          <div className="space-y-4">
-            <ActivityItem
-              icon={<User className="h-4 w-4 text-blue-500" />}
-              title="500 new users joined"
-              time="2 hours ago"
-            />
-            <ActivityItem
-              icon={<Music className="h-4 w-4 text-green-500" />}
-              title="Ariana Grande uploaded new album"
-              time="5 hours ago"
-            />
-            <ActivityItem
-              icon={<DollarSign className="h-4 w-4 text-emerald-500" />}
-              title="Monthly revenue target achieved"
-              time="1 day ago"
-            />
-            <ActivityItem
-              icon={<Wallet className="h-4 w-4 text-amber-500" />}
-              title="15 new withdrawal requests"
-              time="2 days ago"
-            />
-          </div>
-        </div>
-      </div> */}
-
       {/* Export Section */}
       <div className="flex justify-center mt-6 bg-white p-2 rounded-md">
         <div className="text-2xl font-bold text-blue-950 dark:text-gray-400">
