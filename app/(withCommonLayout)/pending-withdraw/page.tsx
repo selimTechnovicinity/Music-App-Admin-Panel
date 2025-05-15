@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import API from "@/lib/axios-client";
+import { useEffect, useState } from "react";
 import {
-  FiDollarSign,
-  FiClock,
   FiCheck,
-  FiX,
+  FiClock,
+  FiDollarSign,
   FiRefreshCw,
   FiSearch,
+  FiX,
 } from "react-icons/fi";
-import API from "@/lib/axios-client";
 
 interface Withdrawal {
   _id: string;
@@ -64,7 +64,7 @@ export default function WithdrawalsPage() {
     switch (status) {
       case "Completed":
         return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
-      case "processing":
+      case "Processing":
         return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
       case "Rejected":
         return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
@@ -265,7 +265,7 @@ export default function WithdrawalsPage() {
                             paddingRight: "2rem",
                           }}
                         >
-                          <option value="processing">Processing</option>
+                          <option value="Processing">Processing</option>
                           <option value="Completed">Completed</option>
                           <option value="Rejected">Rejected</option>
                         </select>

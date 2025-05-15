@@ -43,13 +43,15 @@ export default function TransactionsPage() {
   const fetchTransactions = async () => {
     setIsLoading(true);
     try {
+      console.log(transactionType);
       const endpoint = transactionType
         ? `/payments/admin?transactionType=${transactionType}&page=${pageNo}`
         : `/payments/admin?page=${pageNo}`;
 
       const response = await API.get(endpoint);
       setTransactions(response.data.data.transactions);
-      setTotalPages(response.data.data.totalPages);
+      console.log(response.data.data.transactions);
+      setTotalPages(response?.data?.data?.totalPages);
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
     } finally {
@@ -215,7 +217,7 @@ export default function TransactionsPage() {
                 const type = getTransactionType(transaction);
                 return (
                   <tr
-                    key={transaction._id}
+                    key={transaction?._id}
                     className="hover:bg-gray-50 dark:hover:bg-gray-700"
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -229,7 +231,7 @@ export default function TransactionsPage() {
                           </div>
                           {type === "Music" && (
                             <div className="text-xs text-gray-500 dark:text-gray-400">
-                              {transaction.downloadItemTypes.join(", ")}
+                              {transaction?.downloadItemTypes.join(", ")}
                             </div>
                           )}
                         </div>
@@ -240,13 +242,13 @@ export default function TransactionsPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-full"
-                            src={transaction.userId.photo}
-                            alt={transaction.userId.name}
+                            src={transaction?.userId?.photo}
+                            alt={transaction?.userId?.name}
                           />
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {transaction.userId.name}
+                            {transaction?.userId?.name}
                           </div>
                         </div>
                       </div>
@@ -256,42 +258,41 @@ export default function TransactionsPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-full"
-                            src={transaction.musicianId.photo}
-                            alt={transaction.musicianId.name}
+                            src={transaction?.musicianId?.photo}
+                            alt={transaction?.musicianId?.name}
                           />
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {transaction.musicianId.name}
+                            {transaction?.musicianId?.name}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900 dark:text-white">
-                        ${(transaction.amount / 100).toFixed(2)}
+                        ${(transaction?.amount).toFixed(2)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          transaction.paymentStatus === "succeeded"
+                          transaction?.paymentStatus === "succeeded"
                             ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                             : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                         }`}
                       >
-                        {transaction.paymentStatus}
+                        {transaction?.paymentStatus}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                      {formatDate(transaction.paidAt)}
+                      {formatDate(transaction?.paidAt)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      {transaction.method.charAt(0).toUpperCase() +
-                        transaction.method.slice(1)}
+                      {transaction?.method}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                      {transaction.paymentId}
+                      {transaction?.paymentId}
                     </td>
                   </tr>
                 );
@@ -302,7 +303,7 @@ export default function TransactionsPage() {
       </div>
 
       {/* Empty State */}
-      {transactions.length === 0 && (
+      {transactions?.length === 0 && (
         <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
           <FiDollarSign className="mx-auto text-4xl text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">
@@ -315,7 +316,7 @@ export default function TransactionsPage() {
       )}
 
       {/* Pagination */}
-      {transactions.length > 0 && (
+      {transactions?.length > 0 && (
         <div className="mt-8 flex justify-center gap-2">
           <button
             onClick={handlePrev}

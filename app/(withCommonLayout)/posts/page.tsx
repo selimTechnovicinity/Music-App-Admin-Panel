@@ -43,7 +43,7 @@ export default function PostsPage() {
   const fetchPosts = async () => {
     try {
       const response = await API.get(
-        `/posts?search=${searchQuery}&page=${pageNo}`
+        `/posts/admin?search=${searchQuery}&page=${pageNo}`
       );
       setPosts(response.data.data);
       setTotalPages(response.data.totalPages);
