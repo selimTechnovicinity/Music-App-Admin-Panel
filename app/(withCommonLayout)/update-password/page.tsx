@@ -8,22 +8,23 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export type TUpdatePasswordData = {
-  currentPassword: string;
-  newPassword: string;
+  oldPassword: string;
+  password: string;
   confirmPassword: string;
 };
 
 const UpdatePassword = () => {
   const router = useRouter();
   const [formData, setFormData] = useState<TUpdatePasswordData>({
-    currentPassword: "",
-    newPassword: "",
+    oldPassword: "",
+    password: "",
     confirmPassword: "",
   });
 
   const mutation = useMutation({
     mutationFn: updatePassword,
     onSuccess: (res) => {
+      console.log(res);
       if (res?.status === "success") {
         toast({ title: "Password update successfully." });
         router.push("/update-profile");
@@ -47,7 +48,7 @@ const UpdatePassword = () => {
   const handleReset = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (formData.newPassword !== formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Passwords do not match.",
       });
@@ -66,19 +67,19 @@ const UpdatePassword = () => {
         <form className="mt-4 mb-4" onSubmit={handleReset}>
           <input
             type="password"
-            name="currentPassword"
+            name="oldPassword"
             placeholder="Current Password"
             className="w-full mb-4 p-2 border rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600"
-            value={formData.currentPassword}
+            value={formData.oldPassword}
             onChange={handleChange}
             required
           />
           <input
             type="password"
-            name="newPassword"
+            name="password"
             placeholder="New Password"
             className="w-full mb-4 p-2 border rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600"
-            value={formData.newPassword}
+            value={formData.password}
             onChange={handleChange}
             required
           />

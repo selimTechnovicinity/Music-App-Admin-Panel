@@ -53,7 +53,7 @@ export const updateUser = async (formData: TUpdateData) => {
   return userInfo;
 };
 export const updatePassword = async (formData: TUpdatePasswordData) => {
-  const res = await API.patch(`/auth/update-password`, formData);
+  const res = await API.patch(`/auth/change-password`, formData);
   const result = await res.data;
   return result;
 };

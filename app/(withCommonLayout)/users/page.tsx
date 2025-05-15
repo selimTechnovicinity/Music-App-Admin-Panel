@@ -30,7 +30,7 @@ const Users = () => {
     try {
       const res = await getAllUsers("user", pageNo, limit);
       const usersData = res?.data;
-      const totalPages = res?.totalPages;
+      const totalPages = res?.pagination?.totalPages;
 
       setUsers(usersData || []);
       setTotalPages(totalPages);
