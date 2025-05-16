@@ -2,6 +2,8 @@
 
 import API from "@/lib/axios-client";
 import { useEffect, useState } from "react";
+import { BsBank2 } from "react-icons/bs";
+import { FaRegCopy, FaRegUserCircle } from "react-icons/fa";
 import {
   FiCheck,
   FiClock,
@@ -10,6 +12,8 @@ import {
   FiSearch,
   FiX,
 } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
+import { RxDashboard } from "react-icons/rx";
 
 interface Withdrawal {
   _id: string;
@@ -19,13 +23,21 @@ interface Withdrawal {
     photo: string;
   } | null;
   amount: number;
-  status: "Completed" | "processing" | "failed" | "Rejected";
+  status: "Completed" | "Processing" | "failed" | "Rejected";
   createdAt: string;
   updatedAt: string;
 }
 
+interface BankDetails {
+  accountNumber: string;
+  accountName: string;
+  bankName: string;
+  branchName?: string;
+}
+
 export default function WithdrawalsPage() {
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
+  const [bankDetails, setbankDetails] = useState<BankDetails | null>();
   const [searchQuery, setSearchQuery] = useState("");
   const [pageNo, setPageNo] = useState(1);
   const [limit] = useState(10);
@@ -53,7 +65,6 @@ export default function WithdrawalsPage() {
   const updateWithdrawalStatus = async (id: string, status: string) => {
     try {
       await API.post(`/withdrawals/${id}`, { status });
-
       fetchWithdrawals();
     } catch (error) {
       console.error("Failed to update withdrawal status:", error);
@@ -98,6 +109,10 @@ export default function WithdrawalsPage() {
     });
   };
 
+  const closeModal = () => {
+    setbankDetails(null);
+  };
+
   const handleNext = () => {
     if (pageNo < totalPages) setPageNo((prev) => prev + 1);
   };
@@ -120,6 +135,30 @@ export default function WithdrawalsPage() {
     }
 
     return pages;
+  };
+
+  const handleBankClick = async (id: string) => {
+    try {
+      const response = await API.get(`/bank-details/admin/${id}`);
+      if (response.data) {
+        setbankDetails({
+          accountName: response?.data?.data[0]?.accountName,
+          accountNumber: response?.data?.data[0]?.accountNo,
+          bankName: response?.data?.data[0]?.bankName,
+          branchName: response?.data?.data[0]?.branchName,
+        });
+      } else {
+        setbankDetails(null);
+      }
+    } catch (error) {
+      console.error("Failed to fetch bank details:", error);
+    }
+    // setbankDetails({
+    //   accountName: "John Doe",
+    //   accountNumber: "123456789",
+    //   bankName: "Bank of America",
+    //   branchName: "Main Branch",
+    // });
   };
 
   if (isLoading) {
@@ -193,6 +232,12 @@ export default function WithdrawalsPage() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
+                  Bank Details
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
                   Actions
                 </th>
               </tr>
@@ -245,6 +290,14 @@ export default function WithdrawalsPage() {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {formatDate(withdrawal.createdAt)}
                   </td>
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 cursor-pointer"
+                    onClick={() => {
+                      handleBankClick(withdrawal?.musicianId?._id || "");
+                    }}
+                  >
+                    <BsBank2 />
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-right">
                     <div className="flex items-center gap-4">
                       <div className="relative">
@@ -265,7 +318,22 @@ export default function WithdrawalsPage() {
                             paddingRight: "2rem",
                           }}
                         >
-                          <option value="Processing">Processing</option>
+                          <option
+                            value="Requested"
+                            disabled={
+                              withdrawal.status === "Processing" ||
+                              withdrawal.status === "Completed" ||
+                              withdrawal.status === "Rejected"
+                            }
+                          >
+                            Requested
+                          </option>
+                          <option
+                            value="Processing"
+                            disabled={withdrawal.status === "Completed"}
+                          >
+                            Processing
+                          </option>
                           <option value="Completed">Completed</option>
                           <option value="Rejected">Rejected</option>
                         </select>
@@ -292,6 +360,74 @@ export default function WithdrawalsPage() {
               : "There are currently no withdrawal requests"}
           </p>
         </div>
+      )}
+
+      {bankDetails ? (
+        <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-10 p-4">
+          <div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-xl shadow-2xl overflow-hidden transition-all transform">
+            {/* Header */}
+            <div className="bg-blue-950 dark:from-blue-600 dark:to-blue-700 p-5 flex justify-between items-start">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-full bg-white/20">
+                  <FaRegUserCircle color="white" />
+                </div>
+                <h2 className="text-xl font-bold text-white truncate max-w-xs">
+                  {bankDetails?.accountName}
+                </h2>
+              </div>
+              <button
+                onClick={closeModal}
+                className="p-1 rounded-full hover:bg-white/20 transition-colors cursor-pointer"
+                aria-label="Close"
+              >
+                <IoCloseSharp color="white" size={30} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 space-y-6">
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+                  <RxDashboard />
+                  <span className="text-sm font-medium">Account Number</span>
+                </div>
+                <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                  <div className="flex items-center justify-between">
+                    <p className="font-mono text-lg font-semibold dark:text-white tracking-wider">
+                      {bankDetails?.accountNumber}
+                    </p>
+                    <button
+                      onClick={() =>
+                        navigator.clipboard.writeText(
+                          bankDetails?.accountNumber
+                        )
+                      }
+                      className="p-2 text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                      aria-label="Copy to clipboard"
+                    >
+                      <FaRegCopy />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional bank details can be added in this format */}
+              {bankDetails.bankName && (
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+                    <BsBank2 />
+                    <span className="text-sm font-medium">Bank Name</span>
+                  </div>
+                  <p className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white">
+                    {bankDetails.bankName}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div>No Bank Details found</div>
       )}
 
       {/* Pagination */}
