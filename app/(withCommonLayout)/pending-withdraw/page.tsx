@@ -255,7 +255,7 @@ export default function WithdrawalsPage() {
                           <img
                             className="h-10 w-10 rounded-full"
                             src={withdrawal.musicianId.photo}
-                            alt={withdrawal.musicianId.name}
+                            alt=""
                           />
                         </div>
                         <div className="ml-4">
