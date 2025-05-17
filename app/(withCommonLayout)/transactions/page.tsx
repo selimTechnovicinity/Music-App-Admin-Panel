@@ -243,7 +243,7 @@ export default function TransactionsPage() {
                           <img
                             className="h-10 w-10 rounded-full"
                             src={transaction?.userId?.photo}
-                            alt={transaction?.userId?.name}
+                            alt=""
                           />
                         </div>
                         <div className="ml-4">
@@ -259,7 +259,7 @@ export default function TransactionsPage() {
                           <img
                             className="h-10 w-10 rounded-full"
                             src={transaction?.musicianId?.photo}
-                            alt={transaction?.musicianId?.name}
+                            alt=""
                           />
                         </div>
                         <div className="ml-4">
