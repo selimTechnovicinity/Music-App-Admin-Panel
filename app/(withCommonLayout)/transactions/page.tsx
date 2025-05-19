@@ -1,6 +1,7 @@
 "use client";
 
 import API from "@/lib/axios-client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FiDollarSign, FiFilter, FiHeart, FiShoppingBag } from "react-icons/fi";
 import { TbMusicDollar } from "react-icons/tb";
@@ -236,36 +237,42 @@ export default function TransactionsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <img
-                            className="h-10 w-10 rounded-full"
-                            src={transaction?.userId?.photo}
-                            alt=""
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {transaction?.userId?.name}
+                      <Link href={`/users/edit/${transaction?.userId?._id}`}>
+                        <div className="flex items-center rounded-lg hover:bg-blue-100">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={transaction?.userId?.photo}
+                              alt=""
+                            />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                              {transaction?.userId?.name}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <img
-                            className="h-10 w-10 rounded-full"
-                            src={transaction?.musicianId?.photo}
-                            alt=""
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {transaction?.musicianId?.name}
+                      <Link
+                        href={`/users/edit/${transaction?.musicianId?._id}`}
+                      >
+                        <div className="flex items-center rounded-lg hover:bg-blue-100">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={transaction?.musicianId?.photo}
+                              alt=""
+                            />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                              {transaction?.musicianId?.name}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900 dark:text-white">

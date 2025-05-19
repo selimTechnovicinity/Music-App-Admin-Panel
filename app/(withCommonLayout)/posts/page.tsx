@@ -1,6 +1,7 @@
 "use client";
 
 import API from "@/lib/axios-client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   FiClock,
@@ -9,13 +10,13 @@ import {
   FiHeart,
   FiSearch,
   FiShare2,
-  FiUser,
 } from "react-icons/fi";
 
 interface User {
   _id: string;
   name: string;
   email: string;
+  photo?: string;
 }
 
 interface Post {
@@ -169,11 +170,6 @@ export default function PostsPage() {
                 {post.title}
               </h3>
 
-              <div className="flex items-center text-gray-600 dark:text-gray-300 mb-3">
-                <FiUser className="mr-2" />
-                <span className="truncate">{post.userId.name}</span>
-              </div>
-
               <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
                 <div className="flex items-center">
                   <FiClock className="mr-1" />
@@ -190,6 +186,28 @@ export default function PostsPage() {
                   </div>
                 </div>
               </div>
+              {post?.userId?.name ? (
+                <Link href={`/users/edit/${post?.userId?._id}`}>
+                  <div className="flex items-center mt-2 rounded-lg hover:bg-blue-100">
+                    <div className="flex-shrink-0 h-10 w-10">
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src={post?.userId?.photo}
+                        alt=""
+                      />
+                    </div>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        {post.userId.name}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ) : (
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  N/A
+                </div>
+              )}
             </div>
           </div>
         ))}

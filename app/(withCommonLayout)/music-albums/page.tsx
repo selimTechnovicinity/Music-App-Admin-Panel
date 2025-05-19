@@ -1,6 +1,7 @@
 "use client";
 
 import API from "@/lib/axios-client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   FiDollarSign,
@@ -9,7 +10,6 @@ import {
   FiMusic,
   FiSearch,
   FiShoppingBag,
-  FiUser,
 } from "react-icons/fi";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 
@@ -167,8 +167,17 @@ export default function AlbumsPage() {
               </button>
             </div>
             <div className="flex items-center mt-2 text-gray-600 dark:text-gray-300">
-              <FiUser className="mr-1" />
-              <span>{selectedAlbum.userId.name}</span>
+              <Link href={`/users/edit/${selectedAlbum?.userId?._id}`}>
+                <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
+                  <img
+                    src={selectedAlbum.userId.photo}
+                    alt={selectedAlbum.userId.name}
+                    className="w-15 h-15 rounded-full mr-2"
+                  />
+                  <div>{selectedAlbum.userId.name}</div>
+                </div>
+              </Link>
+
               <FiDollarSign className="ml-3 mr-1" />
               <span>{selectedAlbum.price.toFixed(2)}</span>
             </div>
@@ -253,10 +262,7 @@ export default function AlbumsPage() {
                   <h3 className="font-bold text-lg text-gray-800 dark:text-white truncate">
                     {album.title}
                   </h3>
-                  <div className="flex items-center mt-2 text-gray-600 dark:text-gray-300">
-                    <FiUser className="mr-1" />
-                    <span className="truncate">{album.userId.name}</span>
-                  </div>
+
                   <div className="flex items-center mt-1 text-gray-600 dark:text-gray-300">
                     <FiDollarSign className="mr-1" />
                     <span>{Number(album.price).toFixed(2)}</span>
@@ -267,6 +273,15 @@ export default function AlbumsPage() {
                   </div>
                   <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     {new Date(album.createdAt).toLocaleDateString()}
+                  </div>
+
+                  <div className="flex items-center mt-2 text-gray-600 dark:text-gray-300">
+                    <img
+                      src={album?.userId?.photo}
+                      alt=""
+                      className="w-8 h-8 rounded-full mr-2"
+                    />
+                    <span className="truncate">{album.userId.name}</span>
                   </div>
                 </div>
               </div>

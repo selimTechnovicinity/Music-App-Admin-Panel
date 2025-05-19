@@ -1,6 +1,7 @@
 "use client";
 
 import API from "@/lib/axios-client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BsBank2 } from "react-icons/bs";
 import { FaRegCopy, FaRegUserCircle } from "react-icons/fa";
@@ -250,20 +251,22 @@ export default function WithdrawalsPage() {
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
                     {withdrawal.musicianId ? (
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <img
-                            className="h-10 w-10 rounded-full"
-                            src={withdrawal.musicianId.photo}
-                            alt=""
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {withdrawal.musicianId.name}
+                      <Link href={`/users/edit/${withdrawal?.musicianId?._id}`}>
+                        <div className="flex items-center rounded-lg hover:bg-blue-100">
+                          <div className="flex-shrink-0 h-10 w-10">
+                            <img
+                              className="h-10 w-10 rounded-full"
+                              src={withdrawal.musicianId.photo}
+                              alt=""
+                            />
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">
+                              {withdrawal.musicianId.name}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ) : (
                       <div className="text-sm text-gray-500 dark:text-gray-400">
                         No musician

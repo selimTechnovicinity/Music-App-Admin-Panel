@@ -1,6 +1,7 @@
 "use client";
 
 import API from "@/lib/axios-client";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   FiDollarSign,
@@ -19,6 +20,11 @@ interface Product {
   isDeleted: boolean;
   sell_count: number;
   createdAt: string;
+  userId: {
+    name: string;
+    photo: string;
+    _id: string;
+  };
 }
 
 export default function ProductsPage() {
@@ -38,6 +44,7 @@ export default function ProductsPage() {
       const response = await API.get(
         `/merchandises?page=${pageNo}&limit=${limit}&search=${searchQuery}`
       );
+      console.log(response.data.data);
       setProducts(response.data.data);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -190,6 +197,29 @@ export default function ProductsPage() {
               <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 Added: {formatDate(product.createdAt)}
               </div>
+
+              {product?.userId?.name ? (
+                <Link href={`/users/edit/${product?.userId?._id}`}>
+                  <div className="flex items-center p-1 mt-2 rounded-lg hover:bg-blue-100">
+                    <div className="flex-shrink-0 h-10 w-10">
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src={product.userId.photo}
+                        alt=""
+                      />
+                    </div>
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        {product.userId.name}
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ) : (
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  N/A
+                </div>
+              )}
 
               {product?.isDeleted && (
                 <div className="mt-2 text-sm text-red-500 dark:text-red-400">
