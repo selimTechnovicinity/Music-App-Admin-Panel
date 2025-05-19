@@ -362,19 +362,23 @@ export default function WithdrawalsPage() {
         </div>
       )}
 
-      {bankDetails ? (
+      {bankDetails && (
         <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-10 p-4">
           <div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-xl shadow-2xl overflow-hidden transition-all transform">
             {/* Header */}
             <div className="bg-blue-950 dark:from-blue-600 dark:to-blue-700 p-5 flex justify-between items-start">
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-full bg-white/20">
-                  <FaRegUserCircle color="white" />
+              {bankDetails?.accountName ? (
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-full bg-white/20">
+                    <FaRegUserCircle color="white" />
+                  </div>
+                  <h2 className="text-xl font-bold text-white truncate max-w-xs">
+                    {bankDetails?.accountName}
+                  </h2>
                 </div>
-                <h2 className="text-xl font-bold text-white truncate max-w-xs">
-                  {bankDetails?.accountName}
-                </h2>
-              </div>
+              ) : (
+                <div></div>
+              )}
               <button
                 onClick={closeModal}
                 className="p-1 rounded-full hover:bg-white/20 transition-colors cursor-pointer"
@@ -386,30 +390,36 @@ export default function WithdrawalsPage() {
 
             {/* Content */}
             <div className="p-6 space-y-6">
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
-                  <RxDashboard />
-                  <span className="text-sm font-medium">Account Number</span>
-                </div>
-                <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
-                  <div className="flex items-center justify-between">
-                    <p className="font-mono text-lg font-semibold dark:text-white tracking-wider">
-                      {bankDetails?.accountNumber}
-                    </p>
-                    <button
-                      onClick={() =>
-                        navigator.clipboard.writeText(
-                          bankDetails?.accountNumber
-                        )
-                      }
-                      className="p-2 text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                      aria-label="Copy to clipboard"
-                    >
-                      <FaRegCopy />
-                    </button>
+              {bankDetails?.accountNumber ? (
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+                    <RxDashboard />
+                    <span className="text-sm font-medium">Account Number</span>
+                  </div>
+                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                    <div className="flex items-center justify-between">
+                      <p className="font-mono text-lg font-semibold dark:text-white tracking-wider">
+                        {bankDetails?.accountNumber}
+                      </p>
+                      <button
+                        onClick={() =>
+                          navigator.clipboard.writeText(
+                            bankDetails?.accountNumber
+                          )
+                        }
+                        className="p-2 text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                        aria-label="Copy to clipboard"
+                      >
+                        <FaRegCopy />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <p className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white">
+                  Bank Details Not Found
+                </p>
+              )}
 
               {/* Additional bank details can be added in this format */}
               {bankDetails.bankName && (
@@ -421,13 +431,18 @@ export default function WithdrawalsPage() {
                   <p className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white">
                     {bankDetails.bankName}
                   </p>
+                  <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
+                    <BsBank2 />
+                    <span className="text-sm font-medium">Branch Name</span>
+                  </div>
+                  <p className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white">
+                    {bankDetails?.branchName}
+                  </p>
                 </div>
               )}
             </div>
           </div>
         </div>
-      ) : (
-        <div>No Bank Details found</div>
       )}
 
       {/* Pagination */}
