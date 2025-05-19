@@ -185,36 +185,38 @@ export default function AlbumsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
             {selectedAlbum.songs.map((song) => (
-              <div
-                key={song._id}
-                className="bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden shadow-sm"
-              >
-                <div className="relative aspect-square">
-                  <img
-                    src={song.photo}
-                    alt={song.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="font-medium text-gray-800 dark:text-white truncate mb-2">
-                    {song.title}
-                  </h3>
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center text-gray-800 dark:text-white">
-                      <FiDollarSign className="mr-1" />
-                      <span className="font-medium">
-                        {song?.price.toFixed(2)}
-                      </span>
-                    </div>
+              <Link key={song._id} href={`/songs/details/${song._id}`}>
+                <div
+                  key={song._id}
+                  className="bg-gray-50 dark:bg-gray-700 rounded-lg overflow-hidden shadow-sm"
+                >
+                  <div className="relative aspect-square">
+                    <img
+                      src={song.photo}
+                      alt={song.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-medium text-gray-800 dark:text-white truncate mb-2">
+                      {song.title}
+                    </h3>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center text-gray-800 dark:text-white">
+                        <FiDollarSign className="mr-1" />
+                        <span className="font-medium">
+                          {song?.price.toFixed(2)}
+                        </span>
+                      </div>
 
-                    <div className="flex items-center text-gray-600 dark:text-gray-300">
-                      <FiShoppingBag className="mr-1" />
-                      <span>{song?.sell_count} sold</span>
+                      <div className="flex items-center text-gray-600 dark:text-gray-300">
+                        <FiShoppingBag className="mr-1" />
+                        <span>{song?.sell_count} sold</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
