@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { FiPlus, FiEdit2, FiTrash2, FiSearch } from "react-icons/fi";
 import API from "@/lib/axios-client";
+import { useEffect, useState } from "react";
+import { FiEdit2, FiPlus, FiSearch, FiTrash2 } from "react-icons/fi";
 
 interface Category {
   _id: string;
@@ -108,7 +108,7 @@ export default function CategoriesPage() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
