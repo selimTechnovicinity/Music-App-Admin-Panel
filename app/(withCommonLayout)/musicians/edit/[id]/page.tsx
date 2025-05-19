@@ -70,7 +70,6 @@ const EditUser = () => {
     setError("");
 
     try {
-      console.log(formData);
       const res = await updateUserById(id as string, formData);
 
       toast({ title: res?.message || "User updated successfully." });

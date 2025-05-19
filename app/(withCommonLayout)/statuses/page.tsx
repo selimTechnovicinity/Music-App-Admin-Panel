@@ -51,7 +51,6 @@ export default function StatusesPage() {
           status_name: formValue,
         });
       } else {
-        console.log(formValue);
         await API.post(`/statuses`, { status_name: formValue });
       }
       setIsModalOpen(false);

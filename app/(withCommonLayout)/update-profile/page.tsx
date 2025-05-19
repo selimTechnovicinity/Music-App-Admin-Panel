@@ -41,7 +41,6 @@ const EditUser = () => {
     // queryFn: () => getUserById(decodedToken?.id),
     queryFn: async () => {
       const data = await getUser();
-      console.log(data?.data.name);
       // if (data?.data?.user?.role !== "admin") {
       //   toast.error("You are not authorized to access this page.");
       //   router.push("/login");

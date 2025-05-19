@@ -24,7 +24,6 @@ const UpdatePassword = () => {
   const mutation = useMutation({
     mutationFn: updatePassword,
     onSuccess: (res) => {
-      console.log(res);
       if (res?.status === "success") {
         toast({ title: "Password update successfully." });
         router.push("/update-profile");

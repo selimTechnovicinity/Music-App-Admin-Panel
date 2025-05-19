@@ -43,14 +43,12 @@ export default function TransactionsPage() {
   const fetchTransactions = async () => {
     setIsLoading(true);
     try {
-      console.log(transactionType);
       const endpoint = transactionType
         ? `/payments/admin?transactionType=${transactionType}&page=${pageNo}`
         : `/payments/admin?page=${pageNo}`;
 
       const response = await API.get(endpoint);
       setTransactions(response.data.data.transactions);
-      console.log(response.data.data.transactions);
       setTotalPages(response?.data?.data?.totalPages);
     } catch (error) {
       console.error("Failed to fetch transactions:", error);

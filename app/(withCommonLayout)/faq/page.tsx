@@ -35,7 +35,6 @@ const FAQ = () => {
       setLoading(true);
       const res = await API.get("/additonals/faq");
       const response = res.data;
-      console.log(response)
       if (response?.page?.body) {
         setFaqData({ body: response.page.body });
         setTotalPages(Math.ceil(response.page.body.length / ITEMS_PER_PAGE));
@@ -45,7 +44,6 @@ const FAQ = () => {
         error instanceof Error
           ? error.message
           : "An unexpected error occurred.";
-      console.log(message);
       toast.error(message);
     } finally {
       setLoading(false);

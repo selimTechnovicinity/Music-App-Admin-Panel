@@ -8,6 +8,7 @@ import {
   FiEyeOff,
   FiMusic,
   FiSearch,
+  FiShoppingBag,
   FiUser,
 } from "react-icons/fi";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
@@ -16,6 +17,8 @@ interface Song {
   _id: string;
   title: string;
   photo: string;
+  price: number;
+  sell_count: number;
 }
 
 interface User {
@@ -53,6 +56,7 @@ export default function AlbumsPage() {
       const response = await API.get(
         `/albums/users?sort=${sortOption}&search=${searchQuery}&page=${pageNo}`
       );
+      console.log(response.data.data);
       setAlbums(response.data.data);
       setTotalPages(response.data.pagination.totalPages);
     } catch (error) {
@@ -184,9 +188,22 @@ export default function AlbumsPage() {
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="font-medium text-gray-800 dark:text-white truncate">
+                  <h3 className="font-medium text-gray-800 dark:text-white truncate mb-2">
                     {song.title}
                   </h3>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center text-gray-800 dark:text-white">
+                      <FiDollarSign className="mr-1" />
+                      <span className="font-medium">
+                        {song?.price.toFixed(2)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center text-gray-600 dark:text-gray-300">
+                      <FiShoppingBag className="mr-1" />
+                      <span>{song?.sell_count} sold</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}

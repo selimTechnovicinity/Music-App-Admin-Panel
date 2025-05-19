@@ -104,7 +104,6 @@ export default function OrdersPage() {
 
   const updateOrderStatus = async (orderId: string, status: string) => {
     try {
-      console.log({ status: status });
       await API.post(`/orders/status/${orderId}`, { status: status });
       fetchOrders();
     } catch (error) {

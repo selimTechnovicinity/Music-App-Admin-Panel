@@ -36,7 +36,7 @@ export default function SongsPage() {
   const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState<string>();
 
   useEffect(() => {
     fetchSongs();
@@ -61,7 +61,6 @@ export default function SongsPage() {
   const toggleSongStatus = async (songId: string) => {
     try {
       const data = await API.post(`/songs/hide/${songId}`);
-      console.log(data);
       fetchSongs();
     } catch (error) {
       console.error("Failed to update song status:", error);
@@ -185,16 +184,13 @@ export default function SongsPage() {
                       <div className="flex-shrink-0 h-10 w-10">
                         <img
                           className="h-10 w-10 rounded-md object-cover"
-                          src={song.photo}
-                          alt={song.title}
+                          src={song?.photo}
+                          alt=""
                         />
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {song.title}
-                        </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {/* {formatDuration(song?.duration || null)} */}
                         </div>
                       </div>
                     </div>
@@ -204,8 +200,8 @@ export default function SongsPage() {
                       <div className="flex-shrink-0 h-10 w-10">
                         <img
                           className="h-10 w-10 rounded-full object-cover"
-                          src={song.userId.photo}
-                          alt={song.userId.name}
+                          src={song?.userId?.photo}
+                          alt=""
                         />
                       </div>
                       <div className="ml-4">

@@ -31,7 +31,6 @@ const Users = () => {
       const res = await getAllUsers("musician", pageNo, limit);
       const usersData = res?.data;
       const totalPages = res?.pagination?.totalPages;
-      console.log(res);
 
       setUsers(usersData || []);
       setTotalPages(totalPages);
