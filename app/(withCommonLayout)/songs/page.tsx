@@ -60,7 +60,7 @@ export default function SongsPage() {
 
   const toggleSongStatus = async (songId: string) => {
     try {
-      const data = await API.post(`/songs/hide/${songId}`);
+      await API.post(`/songs/hide/${songId}`);
       fetchSongs();
     } catch (error) {
       console.error("Failed to update song status:", error);

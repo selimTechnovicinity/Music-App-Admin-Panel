@@ -46,6 +46,7 @@ export default function PostsPage() {
       const response = await API.get(
         `/posts/admin?search=${searchQuery}&page=${pageNo}`
       );
+      console.log(response.data.data);
       setPosts(response.data.data);
       setTotalPages(response.data.totalPages);
     } catch (error) {
