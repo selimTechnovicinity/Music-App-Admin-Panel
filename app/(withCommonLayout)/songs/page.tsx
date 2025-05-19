@@ -182,18 +182,18 @@ export default function SongsPage() {
                   className="hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Link href={`/songs/details/${song._id}`}>
+                    <Link href={`/songs/details/${song?._id}`}>
                       <div className="flex items-center rounded-lg p-1 hover:bg-blue-100">
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-md object-cover"
-                            src={song?.photo}
+                            src={song?.photo || "/public/default-image.webp"}
                             alt=""
                           />
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {song.title}
+                            {song?.title}
                           </div>
                         </div>
                       </div>
@@ -205,7 +205,10 @@ export default function SongsPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-full object-cover"
-                            src={song?.userId?.photo}
+                            src={
+                              song?.userId?.photo ||
+                              "/public/default-image.webp"
+                            }
                             alt=""
                           />
                         </div>
