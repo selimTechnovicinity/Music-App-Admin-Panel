@@ -196,30 +196,35 @@ export default function OrdersPage() {
                   </div>
                   {/* User and Musician Info */}
                   <div className="flex flex-wrap gap-4 mt-3">
-                    <Link href={`/users/edit/${order?.userId?._id}`}>
-                      <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
-                        <img
-                          src={order?.userId?.photo}
-                          alt={order.userId.name}
-                          className="w-8 h-8 rounded-full mr-2"
-                        />
-                        <span className="text-sm">
-                          Customer: {order.userId.name}
-                        </span>
-                      </div>
-                    </Link>
-                    <Link href={`/users/edit/${order?.musicianId?._id}`}>
-                      <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
-                        <img
-                          src={order.musicianId?.photo}
-                          alt={order.musicianId.name}
-                          className="w-8 h-8 rounded-full mr-2"
-                        />
-                        <span className="text-sm">
-                          Artist: {order.musicianId.name}
-                        </span>
-                      </div>
-                    </Link>
+                    <div className="flex items-center p-1 rounded-l">
+                      <span className="mr-2">Customer: </span>
+                      <Link href={`/users/edit/${order?.userId?._id}`}>
+                        <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
+                          <img
+                            src={order?.userId?.photo}
+                            alt={order.userId.name}
+                            className="w-8 h-8 rounded-full mr-2"
+                          />
+                          <span className="text-sm">{order.userId.name}</span>
+                        </div>
+                      </Link>
+                    </div>
+
+                    <div className="flex items-center   ">
+                      <span className="mr-2">Artist: </span>
+                      <Link href={`/users/edit/${order?.musicianId?._id}`}>
+                        <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
+                          <img
+                            src={order.musicianId?.photo}
+                            alt={order.musicianId.name}
+                            className="w-8 h-8 rounded-full mr-2"
+                          />
+                          <span className="text-sm">
+                            {order.musicianId.name}
+                          </span>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
