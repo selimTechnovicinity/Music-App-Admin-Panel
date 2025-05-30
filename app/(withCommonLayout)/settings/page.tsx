@@ -84,7 +84,6 @@ export default function SettingsPage() {
       } else if (!logoPreview) {
         formData.append("removeLogo", "true");
       }
-
       await API.post("/app-settings", formData, {
         headers: {
           "Content-Type": "multipart/form-data",

@@ -50,6 +50,7 @@ const TermsPage = () => {
         if (terms?.page?.body) {
           setTitle(terms?.page?.body[0]?.title);
           setContent(terms?.page?.body[0]?.content);
+          console.log(terms?.page?.body);
           const markdown = turndownService.turndown(
             terms?.page?.body[0]?.content
           );
