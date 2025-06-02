@@ -336,15 +336,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             </li>
             <li>
               <Link
-                href="/update-profile"
+                href="/admin-profile"
                 className={`flex items-center gap-3 p-2 rounded ${
-                  isActive("/update-profile")
+                  isActive("/admin-profile")
                     ? "bg-blue-700"
                     : "hover:bg-blue-700"
                 }`}
               >
                 <TbEdit size={20} />
-                <span>Update Admin</span>
+                <span>Admin Profile</span>
               </Link>
             </li>
             {/* <li>

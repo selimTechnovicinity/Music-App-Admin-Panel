@@ -1,9 +1,9 @@
 import { TResetPasswordData } from "@/app/(auth)/forgot-password/verify/reset-password/page";
+import { TUpdateData } from "@/app/(withCommonLayout)/admin-profile/page";
 import { FAQData } from "@/app/(withCommonLayout)/faq/create/page";
 import { UpdateFAQData } from "@/app/(withCommonLayout)/faq/edit/[id]/page";
 import { PrivacyData } from "@/app/(withCommonLayout)/privacy/page";
 import { TUpdatePasswordData } from "@/app/(withCommonLayout)/update-password/page";
-import { TUpdateData } from "@/app/(withCommonLayout)/update-profile/page";
 import { TRegisterData } from "@/app/(withCommonLayout)/users/create/page";
 import API from "./axios-client";
 
@@ -72,10 +72,11 @@ export const getUserById = async (id: string) => {
 export const getAllUsers = async (
   role: string,
   pageNo?: number,
-  limit?: number
+  limit?: number,
+  searchQuery?: string
 ) => {
   const res = await API.get(
-    `/users?page=${pageNo}&limit=${limit}&role=${role}`
+    `/users?page=${pageNo}&limit=${limit}&role=${role}&search=${searchQuery}`
   );
   const users = res.data;
   return users;
