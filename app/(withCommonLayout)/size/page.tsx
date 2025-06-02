@@ -2,11 +2,13 @@
 
 import API from "@/lib/axios-client";
 import { useEffect, useState } from "react";
-import { FiEdit2, FiPlus, FiTrash2 } from "react-icons/fi";
+import { FaEdit } from "react-icons/fa";
+import { FiEye, FiEyeOff, FiPlus } from "react-icons/fi";
 
 interface Size {
   _id: string;
   label: string;
+  isDeleted: boolean;
   displayOrder: number;
   createdAt: string;
 }
@@ -26,7 +28,6 @@ export default function SizesPage() {
   }, [pageNo]);
 
   const fetchSizes = async () => {
-    setIsLoading(true);
     try {
       const response = await API.get(`/sizes?page=${pageNo}`);
       setSizes(response.data.data);
@@ -72,14 +73,14 @@ export default function SizesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this size?")) {
-      try {
-        await API.delete(`/sizes/${id}`);
-        fetchSizes();
-      } catch (error) {
-        console.error("Failed to delete size:", error);
-      }
+    // if (confirm("Are you sure you want to delete this size?")) {
+    try {
+      await API.delete(`/sizes/${id}`);
+      fetchSizes();
+    } catch (error) {
+      console.error("Failed to delete size:", error);
     }
+    // }
   };
 
   //   const moveSizeOrder = async (id: string, direction: "up" | "down") => {
@@ -145,12 +146,12 @@ export default function SizesPage() {
       {/* Sizes Table */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <table className="min-w-full divide-y text-center divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
                   Size Label
                 </th>
@@ -162,13 +163,13 @@ export default function SizesPage() {
                 </th> */}
                 <th
                   scope="col"
-                  className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="bg-white text-center dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {sizes.map((size, index) => (
                 <tr
                   key={index}
@@ -208,18 +209,32 @@ export default function SizesPage() {
                       </button> */}
                   {/* </div>
                   </td> */}
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-6 py-4 flex justify-center gap-3">
                     <button
                       onClick={() => openEditModal(size)}
                       className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-4"
                     >
-                      <FiEdit2 />
+                      <FaEdit />
                     </button>
                     <button
                       onClick={() => handleDelete(size._id)}
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                      className={`flex items-center px-3 py-1 rounded-md ${
+                        size.isDeleted === false
+                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800"
+                          : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
+                      }`}
                     >
-                      <FiTrash2 />
+                      {size.isDeleted === false ? (
+                        <>
+                          <FiEye className="mr-1" />
+                          Hide
+                        </>
+                      ) : (
+                        <>
+                          <FiEyeOff className="mr-1" />
+                          Show
+                        </>
+                      )}
                     </button>
                   </td>
                 </tr>

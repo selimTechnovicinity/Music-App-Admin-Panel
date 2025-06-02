@@ -5,14 +5,15 @@ import API from "@/lib/axios-client";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { FiPause, FiPlay, FiVolume2 } from "react-icons/fi";
 import { IoChevronBack } from "react-icons/io5";
 
 export default function SongPage() {
   const [song, setSong] = useState<any>(null);
-  // const [isPlaying, setIsPlaying] = useState(false);
-  // const [currentTime, setCurrentTime] = useState(0);
-  // const [duration, setDuration] = useState(0);
-  // const [volume, setVolume] = useState(0.7);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(0.7);
   const [isFavorite, setIsFavorite] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,45 +39,45 @@ export default function SongPage() {
     }
   };
 
-  // const togglePlay = () => {
-  //   if (audioRef.current) {
-  //     if (isPlaying) {
-  //       audioRef.current.pause();
-  //     } else {
-  //       audioRef.current.play();
-  //     }
-  //     setIsPlaying(!isPlaying);
-  //   }
-  // };
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
-  // const handleTimeUpdate = () => {
-  //   if (audioRef.current) {
-  //     setCurrentTime(audioRef.current.currentTime);
-  //     setDuration(audioRef.current.duration || 0);
-  //   }
-  // };
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+      setDuration(audioRef.current.duration || 0);
+    }
+  };
 
-  // const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newTime = parseFloat(e.target.value);
-  //   setCurrentTime(newTime);
-  //   if (audioRef.current) {
-  //     audioRef.current.currentTime = newTime;
-  //   }
-  // };
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = parseFloat(e.target.value);
+    setCurrentTime(newTime);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+    }
+  };
 
-  // const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newVolume = parseFloat(e.target.value);
-  //   setVolume(newVolume);
-  //   if (audioRef.current) {
-  //     audioRef.current.volume = newVolume;
-  //   }
-  // };
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+  };
 
-  // const formatTime = (seconds: number) => {
-  //   const mins = Math.floor(seconds / 60);
-  //   const secs = Math.floor(seconds % 60);
-  //   return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  // };
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+  };
   const handleBack = () => {
     router.back(); // Navigate to the previous page
   };
@@ -100,14 +101,13 @@ export default function SongPage() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       {/* Hidden audio element */}
-      {/* <audio
+      <audio
         ref={audioRef}
         src={song.audio}
         onTimeUpdate={handleTimeUpdate}
         onEnded={() => setIsPlaying(false)}
         onLoadedMetadata={handleTimeUpdate}
-      /> */}
-
+      />
       <div
         className="flex items-center text-2xl mb-2 cursor-pointer h-10 w-20 rounded-md text-blue-950 dark:text-white dark:bg-blue-950 dark:hover:bg-blue-900 dark:border-blue-900"
         onClick={handleBack}
@@ -115,7 +115,6 @@ export default function SongPage() {
         <IoChevronBack />
         Back
       </div>
-
       {/* Song Header */}
       <div className="flex flex-col md:flex-row gap-6 mb-8">
         <div className="flex-shrink-0">
@@ -197,9 +196,8 @@ export default function SongPage() {
           </div>
         </div>
       </div>
-
       {/* Player Controls */}
-      {/* <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={togglePlay}
@@ -207,10 +205,9 @@ export default function SongPage() {
           >
             {isPlaying ? <FiPause size={24} /> : <FiPlay size={24} />}
           </button>
-        </div> */}
-
+        </div>
       {/* Progress Bar */}
-      {/* <div className="mb-2">
+      <div className="mb-2">
           <input
             type="range"
             min="0"
@@ -230,10 +227,9 @@ export default function SongPage() {
         <div className="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
-        </div> */}
-
+        </div>
       {/* Volume Control */}
-      {/* <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
           <FiVolume2 size={16} className="text-gray-500 dark:text-gray-400" />
           <input
             type="range"
@@ -250,7 +246,7 @@ export default function SongPage() {
             }}
           />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

@@ -3,11 +3,13 @@
 import API from "@/lib/axios-client";
 import AddLanguageModal from "@/ui/Modal/AddLanguageModal";
 import { useEffect, useState } from "react";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEdit, FaPlus } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 interface Language {
   _id: string;
   language_name: string;
+  isDeleted: boolean;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
@@ -26,7 +28,7 @@ export default function LanguagesPage() {
 
   const fetchLanguages = async () => {
     try {
-      const res = await API.get(`/languages`);
+      const res = await API.get(`/languages/admin`);
       setLanguages(res.data.data);
     } catch (err) {
       console.error("Error fetching languages:", err);
@@ -38,7 +40,7 @@ export default function LanguagesPage() {
   const handleDelete = async (id: string) => {
     try {
       await API.delete(`/languages/${id}`);
-      setLanguages((prev) => prev.filter((l) => l._id !== id));
+      fetchLanguages();
     } catch (err) {
       console.error("Delete error:", err);
     }
@@ -94,20 +96,22 @@ export default function LanguagesPage() {
 
       <div className="my-5 mx-auto w-full max-w-6xl px-4">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="min-w-full text-sm text-center text-gray-500 dark:text-gray-300">
-            <thead>
-              <tr className="bg-blue-100 dark:bg-gray-700">
+          <table className="min-w-full text-sm text-center divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700">
+              <tr>
                 <th className="p-3">Language</th>
                 <th className="p-3">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {languages.map((language) => (
                 <tr
                   key={language._id}
-                  className="even:bg-blue-100 odd:bg-white dark:even:bg-gray-800 dark:odd:bg-gray-900"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  <td className="p-3">{language.language_name}</td>
+                  <td className="px-6 py-4 justify-center text-center whitespace-nowrap">
+                    {language.language_name}
+                  </td>
                   <td className="p-3 flex justify-center gap-3">
                     <button
                       onClick={() => openEditModal(language)}
@@ -117,9 +121,23 @@ export default function LanguagesPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(language._id)}
-                      className="text-red-600 hover:text-red-800"
+                      className={`flex items-center px-3 py-1 rounded-md ${
+                        language.isDeleted === false
+                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800"
+                          : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
+                      }`}
                     >
-                      <FaTrash />
+                      {language.isDeleted === false ? (
+                        <>
+                          <FiEye className="mr-1" />
+                          Hide
+                        </>
+                      ) : (
+                        <>
+                          <FiEyeOff className="mr-1" />
+                          Show
+                        </>
+                      )}
                     </button>
                   </td>
                 </tr>

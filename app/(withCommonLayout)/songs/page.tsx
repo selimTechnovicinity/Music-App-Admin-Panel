@@ -214,7 +214,7 @@ export default function SongsPage() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {song.userId.name}
+                            {song?.userId?.name}
                           </div>
                         </div>
                       </div>

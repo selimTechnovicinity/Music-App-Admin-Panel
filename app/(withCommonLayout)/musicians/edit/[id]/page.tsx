@@ -8,13 +8,12 @@ import { useEffect, useState } from "react";
 export type TUpdateData = {
   name?: string;
   email?: string;
-  phone?: string;
   role?: string;
   isActive?: boolean;
   id?: string;
   __v?: number;
   photo?: string | null;
-  bio?: string | null;
+  bio?: string;
   genres?: string[];
   isVerified?: boolean;
   country?: string | null;
@@ -30,7 +29,7 @@ const EditUser = () => {
 
   const [formData, setFormData] = useState<TUpdateData>({
     name: "",
-    // phone: "",
+    bio: "",
   });
   const [userData, setUserData] = useState<TUpdateData>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -143,9 +142,6 @@ const EditUser = () => {
             </div>
             <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
               <strong>Bio:</strong> {userData?.bio || "N/A"}
-            </div>
-            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              <strong>Country:</strong> {userData?.country || "N/A"}
             </div>
             <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
               <strong>Total Earnings:</strong> $

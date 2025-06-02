@@ -54,9 +54,8 @@ export default function AlbumsPage() {
   const fetchAlbums = async () => {
     try {
       const response = await API.get(
-        `/albums/users?sort=${sortOption}&search=${searchQuery}&page=${pageNo}`
+        `/albums/users?sort=${sortOption}&search=${searchQuery}&page=${pageNo}&limit=12`
       );
-      console.log(response.data.data);
       setAlbums(response.data.data);
       setTotalPages(response.data.pagination.totalPages);
     } catch (error) {

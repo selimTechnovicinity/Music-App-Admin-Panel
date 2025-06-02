@@ -4,10 +4,12 @@ import { getSongFormats } from "@/lib/api";
 import API from "@/lib/axios-client";
 import AddSongFormatModal from "@/ui/Modal/AddSongFormatModal";
 import { useEffect, useState } from "react";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEdit, FaPlus } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 interface SongFormat {
   _id: string;
+  isDeleted: boolean;
   song_format: string;
 }
 
@@ -35,7 +37,7 @@ export default function SongFormatsPage() {
   const handleDelete = async (id: string) => {
     try {
       await API.delete(`/song_formats/${id}`);
-      setFormats((prev) => prev.filter((f) => f._id !== id));
+      fetchFormats();
     } catch (err) {
       console.error("Delete error:", err);
     }
@@ -91,20 +93,32 @@ export default function SongFormatsPage() {
 
       <div className="my-5 mx-auto w-full max-w-6xl px-4">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="min-w-full text-sm text-center text-gray-500 dark:text-gray-300">
-            <thead>
-              <tr className="bg-blue-100 dark:bg-gray-700">
-                <th className="p-3">Format</th>
-                <th className="p-3">Actions</th>
+          <table className="min-w-full text-sm text-center divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Format
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {formats.map((format) => (
                 <tr
                   key={format._id}
-                  className="even:bg-blue-100 odd:bg-white dark:even:bg-gray-800 dark:odd:bg-gray-900"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  <td className="p-3">{format.song_format}</td>
+                  <td className="px-6 py-4 justify-center text-center whitespace-nowrap">
+                    {format.song_format}
+                  </td>
                   <td className="p-3 flex justify-center gap-3">
                     <button
                       onClick={() => openEditModal(format)}
@@ -114,9 +128,23 @@ export default function SongFormatsPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(format._id)}
-                      className="text-red-600 hover:text-red-800"
+                      className={`flex items-center px-3 py-1 rounded-md ${
+                        format.isDeleted === false
+                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800"
+                          : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
+                      }`}
                     >
-                      <FaTrash />
+                      {format.isDeleted === false ? (
+                        <>
+                          <FiEye className="mr-1" />
+                          Hide
+                        </>
+                      ) : (
+                        <>
+                          <FiEyeOff className="mr-1" />
+                          Show
+                        </>
+                      )}
                     </button>
                   </td>
                 </tr>

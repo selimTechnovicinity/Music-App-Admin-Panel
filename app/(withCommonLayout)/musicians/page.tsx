@@ -6,13 +6,14 @@ import API from "@/lib/axios-client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiSearch } from "react-icons/fi";
 
 export type TUser = {
   _id: string;
   name: string;
   email: string;
   phone: string;
+  photo: string;
   role: "user" | "musician" | "admin";
   isDeleted: boolean;
   __v: number;
@@ -24,11 +25,12 @@ const Users = () => {
   const [error, setError] = useState<string | null>(null);
   const [pageNo, setPageNo] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>();
   const limit = 9;
 
   const fetchUsers = async () => {
     try {
-      const res = await getAllUsers("musician", pageNo, limit);
+      const res = await getAllUsers("musician", pageNo, limit, searchQuery);
       const usersData = res?.data;
       const totalPages = res?.pagination?.totalPages;
 
@@ -42,7 +44,7 @@ const Users = () => {
   };
   useEffect(() => {
     fetchUsers();
-  }, [pageNo]);
+  }, [pageNo, searchQuery]);
 
   const toggleStatus = async (userId: string) => {
     try {
@@ -79,13 +81,40 @@ const Users = () => {
 
   return (
     <main className="my-10 mx-auto w-full max-w-6xl px-4">
-      <div className="flex justify-end mr-5">
-        {/* <Link href="/musicians/create">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            Musicians
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Manage all musicians in the system
+          </p>
+        </div>
+
+        {/* search  */}
+        <div className="relative w-full md:w-96">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <FiSearch className="text-gray-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search musicians..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setPageNo(1);
+            }}
+            className="pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg w-full focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+      </div>
+      {/* <div className="flex justify-end mr-5"> */}
+      {/* <Link href="/musicians/create">
           <button className="bg-blue-950 dark:bg-blue-800 cursor-pointer text-white px-4 py-2 rounded-lg transition hover:bg-blue-800 dark:hover:bg-blue-700">
             + Add new musician
           </button>
         </Link> */}
-      </div>
+      {/* </div> */}
       {error ? (
         <p className="ml-40 text-center font-bold mt-40 bg-red-600 w-200 p-5 text-white">
           {error}
@@ -93,27 +122,76 @@ const Users = () => {
       ) : (
         <div>
           {loading && <Loading />}
-          <div className="my-5 mx-auto w-full max-w-6xl px-4">
+          <div className="my-5 mx-auto w-full max-w-6xl">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table className="min-w-full text-sm text-left text-gray-500 dark:text-gray-300">
-                <thead>
-                  <tr className="bg-blue-100 dark:bg-gray-700">
-                    <th className="p-3 text-left">Name</th>
-                    <th className="p-3 text-left">Phone Number</th>
-                    <th className="p-3 text-left">Email</th>
-                    <th className="p-3 text-left">Role</th>
-                    <th className="p-3 text-left">Action</th>
-                    <th className="p-3 text-left">Edit</th>
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead className="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    >
+                      Name
+                    </th>
+                    {/* <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    >
+                      Phone Number
+                    </th> */}
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    >
+                      Email
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    >
+                      Role
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    >
+                      Action
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    >
+                      Edit
+                    </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                   {users.map((user, index) => (
                     <tr
                       key={index}
-                      className="even:bg-blue-100 odd:bg-white dark:even:bg-gray-800 dark:odd:bg-gray-900"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
-                      <td className="p-3">{user?.name}</td>
-                      <td className="p-3">{user?.phone}</td>
+                      <td className="p-3">
+                        <Link href={`/musicians/edit/${user?._id}`}>
+                          <div className="flex items-center rounded-lg p-1 hover:bg-blue-100">
+                            <div className="flex-shrink-0 h-10 w-10">
+                              <img
+                                className="h-10 w-10 rounded-full object-cover"
+                                src={
+                                  user?.photo || "/public/default-image.webp"
+                                }
+                                alt=""
+                              />
+                            </div>
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                {user?.name}
+                              </div>
+                            </div>
+                          </div>
+                        </Link>
+                      </td>
+                      {/* <td className="p-3">{user?.phone}</td> */}
                       <td className="p-3">{user?.email}</td>
                       <td className="p-3">
                         <span

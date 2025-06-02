@@ -1,4 +1,5 @@
 "use client";
+import { toast } from "@/hooks/use-toast";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { getUser, updateUser } from "@/lib/api";
 import { getUserInfo } from "@/services/auth.service";
@@ -7,12 +8,11 @@ import Cookies from "js-cookie";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export type TUpdateData = {
   name?: string;
   email?: string;
-  phone?: string;
+  bio?: string;
   role?: string;
   isActive?: boolean;
   id?: string;
@@ -32,7 +32,7 @@ const EditUser = () => {
 
   const [formData, setFormData] = useState<TUpdateData>({
     name: "",
-    phone: "",
+    bio: "",
   });
 
   // Fetch user data
@@ -48,7 +48,7 @@ const EditUser = () => {
       // }
       setFormData({
         name: data?.data.name || "",
-        phone: data?.data?.phone || "",
+        bio: data?.data?.bio || "",
       });
       return data;
     },
@@ -59,14 +59,17 @@ const EditUser = () => {
     mutationFn: (data: TUpdateData) => updateUser(data),
     onSuccess: (res) => {
       if (res?.data?.user) {
-        toast.success("Updated successfully.");
+        toast({ title: res?.message || "User updated successfully." });
         router.push("/update-profile");
       } else {
-        toast.error(res?.message || "Failed to update.");
+        toast({ title: res?.message || "Failed to update." });
       }
     },
     onError: () => {
-      toast.error("Failed to update. Please try again later.");
+      toast({
+        title: "Failed to update. Please try again later.",
+        variant: "default",
+      });
     },
   });
 
@@ -106,7 +109,7 @@ const EditUser = () => {
             <div className="mb-4">
               <label
                 htmlFor="name"
-                className="block text-gray-700 dark:text-gray-300 font-semibold mb-1"
+                className="block text-gray-700 dark:text-gray-300 font-semibold "
               >
                 Name
               </label>
@@ -120,29 +123,50 @@ const EditUser = () => {
                 onChange={handleChange}
               />
             </div>
-            {/* <div className="mb-4">
+            <div className="mb-4">
               <label
-                htmlFor="phone"
+                htmlFor="bio"
                 className="block text-gray-700 dark:text-gray-300 font-semibold mb-1"
               >
-                Phone Number
+                Bio
               </label>
               <input
                 type="text"
-                id="phone"
-                name="phone"
-                placeholder="Phone Number"
+                id="bio"
+                name="bio"
+                placeholder="Bio"
                 className="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600"
-                value={formData.phone}
+                value={formData.bio}
                 onChange={handleChange}
               />
-            </div> */}
-
-            <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              <strong>Email:</strong> {data?.data?.email || "N/A"}
             </div>
-            <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              <strong>Role:</strong> {data?.data?.role || "N/A"}
+            <div className="space-y-2 mt-4">
+              <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+                <strong>Email:</strong> {data?.data?.email || "N/A"}
+              </div>
+              <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+                <strong>Role:</strong> {data?.data?.role || "N/A"}
+              </div>
+              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+                <strong>Total Earnings:</strong> $
+                {data?.data?.total_earning?.toFixed(2) || "0.00"}
+              </div>
+              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+                <strong>Latest Earnings:</strong> $
+                {data?.data?.total_latest_earning?.toFixed(2) || "0.00"}
+              </div>
+              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+                <strong>Song Earnings:</strong> $
+                {data?.data?.total_song_earning?.toFixed(2) || "0.00"}
+              </div>
+              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+                <strong>Product Earnings:</strong> $
+                {data?.data?.total_product_earning?.toFixed(2) || "0.00"}
+              </div>
+              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+                <strong>Donation Earnings:</strong> $
+                {data?.data?.total_donation_earning?.toFixed(2) || "0.00"}
+              </div>
             </div>
 
             <button

@@ -9,13 +9,12 @@ import { IoChevronBack } from "react-icons/io5";
 export type TUpdateData = {
   name?: string;
   email?: string;
-  phone?: string;
+  bio?: string;
   role?: string;
   isActive?: boolean;
   id?: string;
   __v?: number;
   photo?: string | null;
-  bio?: string | null;
   genres?: string[];
   isVerified?: boolean;
   country?: string | null;
@@ -32,7 +31,7 @@ const EditUser = () => {
 
   const [formData, setFormData] = useState<TUpdateData>({
     name: "",
-    phone: "",
+    bio: "",
   });
   const [userData, setUserData] = useState<TUpdateData>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -47,7 +46,7 @@ const EditUser = () => {
           setUserData(userData);
           setFormData({
             name: userData.name || "",
-            // phone: userData.phone || "",
+            // bio: userData.bio || "",
           });
         } else {
           toast({ title: "Failed to load user data." });
@@ -121,19 +120,19 @@ const EditUser = () => {
 
             {/* <div className="mb-4">
             <label
-              htmlFor="phone"
+              htmlFor="bio"
               className="block text-gray-700 dark:text-gray-300 font-semibold mb-1"
             >
-              Phone Number
+              bio Number
             </label>
             <input
               type="text"
-              id="phone"
-              name="phone"
-              aria-label="Phone Number"
-              placeholder="Phone Number"
+              id="bio"
+              name="bio"
+              aria-label="bio Number"
+              placeholder="bio Number"
               className="w-full p-2 border dark:border-none rounded-md dark:bg-gray-700 dark:text-gray-200"
-              value={formData?.phone || ""}
+              value={formData?.bio || ""}
               onChange={handleChange}
             />
           </div> */}
@@ -155,9 +154,6 @@ const EditUser = () => {
               </div>
               <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
                 <strong>Bio:</strong> {userData?.bio || "N/A"}
-              </div>
-              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-                <strong>Country:</strong> {userData?.country || "N/A"}
               </div>
               <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
                 <strong>Total Earnings:</strong> $

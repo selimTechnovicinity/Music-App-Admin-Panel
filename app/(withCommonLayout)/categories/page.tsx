@@ -2,11 +2,12 @@
 
 import API from "@/lib/axios-client";
 import { useEffect, useState } from "react";
-import { FiEdit2, FiPlus, FiSearch, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiEye, FiEyeOff, FiPlus, FiSearch } from "react-icons/fi";
 
 interface Category {
   _id: string;
   category_name: string;
+  isDeleted: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -26,10 +27,9 @@ export default function CategoriesPage() {
   }, [pageNo, searchQuery]);
 
   const fetchCategories = async () => {
-    setIsLoading(true);
     try {
       const response = await API.get(
-        `/categories?page=${pageNo}&search=${searchQuery}`
+        `/categories/admin?page=${pageNo}&search=${searchQuery}`
       );
       setCategories(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -72,14 +72,14 @@ export default function CategoriesPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this category?")) {
-      try {
-        await API.delete(`/categories/${id}`);
-        fetchCategories();
-      } catch (error) {
-        console.error("Failed to delete category:", error);
-      }
+    // if (confirm("Are you sure you want to hide this category?")) {
+    try {
+      await API.delete(`/categories/${id}`);
+      fetchCategories();
+    } catch (error) {
+      console.error("Failed to delete category:", error);
     }
+    // }
   };
 
   const handleNext = () => {
@@ -192,7 +192,7 @@ export default function CategoriesPage() {
                       {new Date(category.createdAt).toLocaleDateString()}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-6 py-4 flex justify-center gap-3">
                     <button
                       onClick={() => openEditModal(category)}
                       className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-4"
@@ -201,9 +201,23 @@ export default function CategoriesPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(category._id)}
-                      className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                      className={`flex items-center px-3 py-1 rounded-md ${
+                        category.isDeleted === false
+                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800"
+                          : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
+                      }`}
                     >
-                      <FiTrash2 />
+                      {category.isDeleted === false ? (
+                        <>
+                          <FiEye className="mr-1" />
+                          Hide
+                        </>
+                      ) : (
+                        <>
+                          <FiEyeOff className="mr-1" />
+                          Show
+                        </>
+                      )}
                     </button>
                   </td>
                 </tr>

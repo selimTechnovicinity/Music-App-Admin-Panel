@@ -202,10 +202,10 @@ export default function OrdersPage() {
                         <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
                           <img
                             src={order?.userId?.photo}
-                            alt={order.userId.name}
+                            alt=""
                             className="w-8 h-8 rounded-full mr-2"
                           />
-                          <span className="text-sm">{order.userId.name}</span>
+                          <span className="text-sm">{order?.userId?.name}</span>
                         </div>
                       </Link>
                     </div>

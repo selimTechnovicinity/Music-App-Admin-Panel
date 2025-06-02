@@ -48,7 +48,6 @@ const SummaryCard = ({
   </div>
 );
 
-
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
 
 export default function Dashboard() {
@@ -97,6 +96,7 @@ export default function Dashboard() {
   const fetchDashboardData = async () => {
     try {
       const res = await API.get("/users/admin/dashboard");
+      console.log(res.data.data);
       setDashboardData(res.data.data);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);

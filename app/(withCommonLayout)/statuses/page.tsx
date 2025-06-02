@@ -3,11 +3,13 @@
 import API from "@/lib/axios-client";
 import AddStatusModal from "@/ui/Modal/AddStatusModal";
 import { useEffect, useState } from "react";
-import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEdit, FaPlus } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 interface Status {
   _id: string;
   status_name: string;
+  isDeleted: boolean;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
@@ -38,7 +40,7 @@ export default function StatusesPage() {
   const handleDelete = async (id: string) => {
     try {
       await API.delete(`/statuses/${id}`);
-      setStatuses((prev) => prev.filter((s) => s._id !== id));
+      fetchStatuses();
     } catch (err) {
       console.error("Delete error:", err);
     }
@@ -80,7 +82,7 @@ export default function StatusesPage() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Statuses</h1>
+        <h1 className="text-2xl font-bold">Order Statuses</h1>
         <button
           className="flex items-center gap-2 bg-blue-950 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer"
           onClick={() => {
@@ -95,20 +97,32 @@ export default function StatusesPage() {
 
       <div className="my-5 mx-auto w-full max-w-6xl px-4">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="min-w-full text-sm text-center text-gray-500 dark:text-gray-300">
-            <thead>
-              <tr className="bg-blue-100 dark:bg-gray-700">
-                <th className="p-3">Status</th>
-                <th className="p-3">Actions</th>
+          <table className="min-w-full text-sm text-center divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {statuses.map((status) => (
                 <tr
                   key={status._id}
-                  className="even:bg-blue-100 odd:bg-white dark:even:bg-gray-800 dark:odd:bg-gray-900"
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  <td className="p-3">{status.status_name}</td>
+                  <td className="px-6 py-4 justify-center text-center whitespace-nowrap">
+                    {status.status_name}
+                  </td>
                   <td className="p-3 flex justify-center gap-3">
                     <button
                       onClick={() => openEditModal(status)}
@@ -118,9 +132,23 @@ export default function StatusesPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(status._id)}
-                      className="text-red-600 hover:text-red-800"
+                      className={`flex items-center px-3 py-1 rounded-md ${
+                        status.isDeleted === false
+                          ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800"
+                          : "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 hover:bg-red-200 dark:hover:bg-red-800"
+                      }`}
                     >
-                      <FaTrash />
+                      {status.isDeleted === false ? (
+                        <>
+                          <FiEye className="mr-1" />
+                          Hide
+                        </>
+                      ) : (
+                        <>
+                          <FiEyeOff className="mr-1" />
+                          Show
+                        </>
+                      )}
                     </button>
                   </td>
                 </tr>
