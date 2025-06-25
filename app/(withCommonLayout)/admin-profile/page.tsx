@@ -37,7 +37,7 @@ const EditUser = () => {
 
   // Fetch user data
   const { data, isLoading: isUserLoading } = useQuery({
-    queryKey: ["user", decodedToken?.id],
+    queryKey: ["admin", decodedToken?.id],
     // queryFn: () => getUserById(decodedToken?.id),
     queryFn: async () => {
       const data = await getUser();
@@ -146,26 +146,6 @@ const EditUser = () => {
               </div>
               <div className="w-full p-2 mt-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
                 <strong>Role:</strong> {data?.data?.role || "N/A"}
-              </div>
-              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-                <strong>Total Earnings:</strong> $
-                {data?.data?.total_earning?.toFixed(2) || "0.00"}
-              </div>
-              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-                <strong>Latest Earnings:</strong> $
-                {data?.data?.total_latest_earning?.toFixed(2) || "0.00"}
-              </div>
-              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-                <strong>Song Earnings:</strong> $
-                {data?.data?.total_song_earning?.toFixed(2) || "0.00"}
-              </div>
-              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-                <strong>Product Earnings:</strong> $
-                {data?.data?.total_product_earning?.toFixed(2) || "0.00"}
-              </div>
-              <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-                <strong>Donation Earnings:</strong> $
-                {data?.data?.total_donation_earning?.toFixed(2) || "0.00"}
               </div>
             </div>
 

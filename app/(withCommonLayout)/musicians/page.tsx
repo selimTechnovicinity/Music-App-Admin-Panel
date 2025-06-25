@@ -1,55 +1,35 @@
 "use client";
 
 import Loading from "@/app/loading";
-import { getAllUsers } from "@/lib/api";
+import { useUsers } from "@/hooks/useUsers";
 import API from "@/lib/axios-client";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FiEye, FiEyeOff, FiSearch } from "react-icons/fi";
 
-export type TUser = {
-  _id: string;
-  name: string;
-  email: string;
-  phone: string;
-  photo: string;
-  role: "user" | "musician" | "admin";
-  isDeleted: boolean;
-  __v: number;
-};
-
 const Users = () => {
-  const [users, setUsers] = useState<TUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
   const [pageNo, setPageNo] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [searchQuery, setSearchQuery] = useState<string>();
+
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   const limit = 9;
 
-  const fetchUsers = async () => {
-    try {
-      const res = await getAllUsers("musician", pageNo, limit, searchQuery);
-      const usersData = res?.data;
-      const totalPages = res?.pagination?.totalPages;
-
-      setUsers(usersData || []);
-      setTotalPages(totalPages);
-    } catch {
-      setError("Musicians data not found");
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchUsers();
-  }, [pageNo, searchQuery]);
+  const { users, totalPages, isPending, error } = useUsers(
+    "musician",
+    pageNo,
+    limit,
+    searchQuery
+  );
 
   const toggleStatus = async (userId: string) => {
     try {
       await API.post(`/users/hide/${userId}`);
-      fetchUsers();
+      queryClient.invalidateQueries({
+        queryKey: ["users"],
+      });
     } catch (error) {
       console.error("Failed to update song status:", error);
     }
@@ -121,7 +101,7 @@ const Users = () => {
         </p>
       ) : (
         <div>
-          {loading && <Loading />}
+          {isPending && <Loading />}
           <div className="my-5 mx-auto w-full max-w-6xl">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -226,8 +206,8 @@ const Users = () => {
                           )}
                         </button>
                       </td>
-                      <td className="p-3 flex space-x-2">
-                        <Link href={`/musicians/edit/${user?._id}`}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <Link href={`/users/edit/${user?._id}`}>
                           <button className="cursor-pointer text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition">
                             <FaEdit />
                           </button>

@@ -6,6 +6,7 @@ import { PrivacyData } from "@/app/(withCommonLayout)/privacy/page";
 import { TUpdatePasswordData } from "@/app/(withCommonLayout)/update-password/page";
 import { TRegisterData } from "@/app/(withCommonLayout)/users/create/page";
 import API from "./axios-client";
+import { TUser } from "@/types/user";
 
 type forgotPasswordType = { email: string };
 type resetPasswordType = { password: string; verificationCode: string };
@@ -74,7 +75,7 @@ export const getAllUsers = async (
   pageNo?: number,
   limit?: number,
   searchQuery?: string
-) => {
+): Promise<{ data: TUser[]; pagination: { totalPages: number } }> => {
   const res = await API.get(
     `/users?page=${pageNo}&limit=${limit}&role=${role}&search=${searchQuery}`
   );
