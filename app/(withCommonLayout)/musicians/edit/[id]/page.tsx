@@ -106,25 +106,6 @@ const EditUser = () => {
             />
           </div>
 
-          {/* <div className="mb-4">
-            <label
-              htmlFor="phone"
-              className="block text-gray-700 dark:text-gray-300 font-semibold mb-1"
-            >
-              Phone Number
-            </label>
-            <input
-              type="text"
-              id="phone"
-              name="phone"
-              aria-label="Phone Number"
-              placeholder="Phone Number"
-              className="w-full p-2 border dark:border-none rounded-md dark:bg-gray-700 dark:text-gray-200"
-              value={formData?.phone || ""}
-              onChange={handleChange}
-            />
-          </div> */}
-
           {/* Display all user data as non-editable */}
           <div className="space-y-2 mt-4">
             <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
@@ -140,7 +121,7 @@ const EditUser = () => {
             <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
               <strong>Verified:</strong> {userData?.isVerified ? "Yes" : "No"}
             </div>
-            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
+            <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300 break-words overflow-auto">
               <strong>Bio:</strong> {userData?.bio || "N/A"}
             </div>
             <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">

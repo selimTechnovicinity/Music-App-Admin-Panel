@@ -18,6 +18,7 @@ interface Transaction {
   musicianId: User;
   paymentId: string;
   amount: number;
+  song_commission: number;
   currency: string;
   paymentStatus: string;
   method: string;
@@ -184,6 +185,12 @@ export default function TransactionsPage() {
                 >
                   Amount
                 </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  Commission
+                </th>
 
                 <th
                   scope="col"
@@ -277,6 +284,11 @@ export default function TransactionsPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900 dark:text-white">
                         ${(transaction?.amount).toFixed(2)}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900 dark:text-white">
+                        ${(transaction?.song_commission).toFixed(2)}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

@@ -13,6 +13,7 @@ import {
   FiSearch,
   FiX,
 } from "react-icons/fi";
+import { GrDocumentNotes } from "react-icons/gr";
 import { IoCloseSharp } from "react-icons/io5";
 import { RxDashboard } from "react-icons/rx";
 
@@ -27,6 +28,7 @@ interface Withdrawal {
   status: "Completed" | "Processing" | "failed" | "Rejected";
   createdAt: string;
   updatedAt: string;
+  note: string;
 }
 
 interface BankDetails {
@@ -44,6 +46,8 @@ export default function WithdrawalsPage() {
   const [limit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [note, setNote] = useState("");
+  const [isNoteOpen, setIsNoteOpen] = useState(false);
 
   useEffect(() => {
     fetchWithdrawals();
@@ -111,6 +115,8 @@ export default function WithdrawalsPage() {
   };
 
   const closeModal = () => {
+    setIsNoteOpen(false);
+    setNote("");
     setbankDetails(null);
   };
 
@@ -154,12 +160,6 @@ export default function WithdrawalsPage() {
     } catch (error) {
       console.error("Failed to fetch bank details:", error);
     }
-    // setbankDetails({
-    //   accountName: "John Doe",
-    //   accountNumber: "123456789",
-    //   bankName: "Bank of America",
-    //   branchName: "Main Branch",
-    // });
   };
 
   if (isLoading) {
@@ -239,6 +239,12 @@ export default function WithdrawalsPage() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                 >
+                  Notes
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
                   Actions
                 </th>
               </tr>
@@ -300,6 +306,15 @@ export default function WithdrawalsPage() {
                     }}
                   >
                     <BsBank2 />
+                  </td>
+                  <td
+                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 cursor-pointer"
+                    onClick={() => {
+                      setNote(withdrawal?.note);
+                      setIsNoteOpen(true);
+                    }}
+                  >
+                    <GrDocumentNotes />
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-right">
                     <div className="flex items-center gap-4">
@@ -365,6 +380,7 @@ export default function WithdrawalsPage() {
         </div>
       )}
 
+      {/* Bank Details */}
       {bankDetails && (
         <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-10 p-4">
           <div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-xl shadow-2xl overflow-hidden transition-all transform">
@@ -442,6 +458,46 @@ export default function WithdrawalsPage() {
                     {bankDetails?.branchName}
                   </p>
                 </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Note */}
+      {isNoteOpen && (
+        <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex justify-center items-center z-10 p-4">
+          <div className="bg-white dark:bg-gray-800 w-full max-w-md rounded-xl shadow-2xl overflow-hidden transition-all transform">
+            {/* Header */}
+            <div className="bg-blue-950 dark:from-blue-600 dark:to-blue-700 p-5 flex justify-between items-start">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 rounded-full bg-white/20">
+                  <FaRegUserCircle color="white" />
+                </div>
+                <h2 className="text-xl font-bold text-white truncate max-w-xs">
+                  Note
+                </h2>
+              </div>
+
+              <button
+                onClick={closeModal}
+                className="p-1 rounded-full hover:bg-white/20 transition-colors cursor-pointer"
+                aria-label="Close"
+              >
+                <IoCloseSharp color="white" size={30} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 space-y-6">
+              {note ? (
+                <p className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white">
+                  {note}
+                </p>
+              ) : (
+                <p className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-white">
+                  Note Not Found
+                </p>
               )}
             </div>
           </div>

@@ -103,9 +103,16 @@ export default function OrdersPage() {
     }
   };
 
-  const updateOrderStatus = async (orderId: string, status: string) => {
+  const updateOrderStatus = async (
+    orderId: string,
+    status: string,
+    musicianId: string
+  ) => {
     try {
-      await API.post(`/orders/status/${orderId}`, { status: status });
+      await API.post(`/orders/status/${orderId}`, {
+        status: status,
+        musicianId,
+      });
       fetchOrders();
     } catch (error) {
       console.error("Failed to update order status:", error);
@@ -235,7 +242,11 @@ export default function OrdersPage() {
                   <select
                     value={order.status._id}
                     onChange={(e) =>
-                      updateOrderStatus(order._id, e.target.value)
+                      updateOrderStatus(
+                        order._id,
+                        e.target.value,
+                        order?.musicianId?._id
+                      )
                     }
                     className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                   >
