@@ -1,10 +1,10 @@
 "use client";
-import { toast } from "@/hooks/use-toast";
 import { getUserById, updateUserById } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 export type TUpdateData = {
   name?: string;
@@ -49,10 +49,10 @@ const EditUser = () => {
             // bio: userData.bio || "",
           });
         } else {
-          toast({ title: "Failed to load user data." });
+          toast.error("Failed to load user data.");
         }
       } catch (err) {
-        toast({ title: (err as string) || "Error loading user data" });
+        toast.error((err as string) || "Error loading user data");
       }
     };
 
@@ -72,10 +72,10 @@ const EditUser = () => {
 
     try {
       const res = await updateUserById(id as string, formData);
-      toast({ title: res?.message || "User updated successfully." });
+      toast.success(res?.message || "User updated successfully.");
     } catch (error) {
       setError(error as string);
-      toast({ title: error as string });
+      toast.error(error as string);
     } finally {
       setLoading(false);
     }

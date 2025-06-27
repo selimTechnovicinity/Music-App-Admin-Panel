@@ -3,6 +3,7 @@ import QueryProvider from "@/context/query-provider";
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
 
 const dm_sans = DM_Sans({ subsets: ["latin"] });
 
@@ -20,6 +21,18 @@ export default function RootLayout({
     <html lang="en">
       <body className={`bg-background ${dm_sans.className} antialiased`}>
         <QueryProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
           {children}
           <Toaster />
         </QueryProvider>

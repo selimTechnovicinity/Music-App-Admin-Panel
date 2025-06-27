@@ -1,9 +1,8 @@
 import { TResetPasswordData } from "@/app/(auth)/forgot-password/verify/reset-password/page";
-import { TUpdateData } from "@/app/(withCommonLayout)/admin-profile/page";
+import { PasswordFormData, TUpdateData } from "@/app/(withCommonLayout)/admin-profile/page";
 import { FAQData } from "@/app/(withCommonLayout)/faq/create/page";
 import { UpdateFAQData } from "@/app/(withCommonLayout)/faq/edit/[id]/page";
 import { PrivacyData } from "@/app/(withCommonLayout)/privacy/page";
-import { TUpdatePasswordData } from "@/app/(withCommonLayout)/update-password/page";
 import { TRegisterData } from "@/app/(withCommonLayout)/users/create/page";
 import API from "./axios-client";
 import { TUser } from "@/types/user";
@@ -22,6 +21,7 @@ type registerType = {
   password: string;
   confirmPassword: string;
 };
+
 
 type verifyEmailType = { code: string };
 
@@ -53,8 +53,8 @@ export const updateUser = async (formData: TUpdateData) => {
 
   return userInfo;
 };
-export const updatePassword = async (formData: TUpdatePasswordData) => {
-  const res = await API.patch(`/auth/change-password`, formData);
+export const updatePasswordFn = async (formData: PasswordFormData) => {
+  const res = await API.post(`/auth/change-password`, formData);
   const result = await res.data;
   return result;
 };

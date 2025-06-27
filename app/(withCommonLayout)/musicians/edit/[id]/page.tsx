@@ -1,9 +1,9 @@
 "use client";
-import { toast } from "@/hooks/use-toast";
 import { getUserById, updateUserById } from "@/lib/api";
 import { Loader2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export type TUpdateData = {
   name?: string;
@@ -47,10 +47,10 @@ const EditUser = () => {
             // phone: userData.phone || "",
           });
         } else {
-          toast({ title: "Failed to load user data." });
+          toast.error("Failed to load user data.");
         }
       } catch (err) {
-        toast({ title: (err as string) || "Error loading user data" });
+        toast.error((err as string) || "Error loading user data");
       }
     };
 
@@ -71,10 +71,10 @@ const EditUser = () => {
     try {
       const res = await updateUserById(id as string, formData);
 
-      toast({ title: res?.message || "User updated successfully." });
+      toast.success(res?.message || "User updated successfully.");
     } catch (error) {
       setError(error as string);
-      toast({ title: error as string });
+      toast.error(error as string);
     } finally {
       setLoading(false);
     }
@@ -129,7 +129,7 @@ const EditUser = () => {
               {userData?.total_earning?.toFixed(2) || "0.00"}
             </div>
             <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
-              <strong>Latest Earnings:</strong> $
+              <strong>Available Balance:</strong> $
               {userData?.total_latest_earning?.toFixed(2) || "0.00"}
             </div>
             <div className="w-full p-2 bg-gray-100 dark:bg-gray-700 rounded-md text-gray-600 dark:text-gray-300">
