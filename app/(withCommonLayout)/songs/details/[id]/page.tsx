@@ -103,7 +103,7 @@ export default function SongPage() {
       {/* Hidden audio element */}
       <audio
         ref={audioRef}
-        src={song.audio}
+        src={song.audio || "/default-image.jpg"}
         onTimeUpdate={handleTimeUpdate}
         onEnded={() => setIsPlaying(false)}
         onLoadedMetadata={handleTimeUpdate}
@@ -119,7 +119,7 @@ export default function SongPage() {
       <div className="flex flex-col md:flex-row gap-6 mb-8">
         <div className="flex-shrink-0">
           <img
-            src={song.photo}
+            src={song.photo || "/default-image.jpg"}
             alt={song.title}
             className="w-64 h-64 rounded-lg object-cover shadow-md"
           />
@@ -131,7 +131,7 @@ export default function SongPage() {
           <Link href={`/users/edit/${song?.userId?._id}`}>
             <div className="flex items-center gap-4 my-2 hover:bg-blue-100 p-1 rounded-lg">
               <img
-                src={song.userId.photo}
+                src={song.userId.photo || "/default-image.jpg"}
                 alt={song.userId.name}
                 className="w-16 h-16 rounded-full object-cover"
               />
@@ -206,8 +206,8 @@ export default function SongPage() {
             {isPlaying ? <FiPause size={24} /> : <FiPlay size={24} />}
           </button>
         </div>
-      {/* Progress Bar */}
-      <div className="mb-2">
+        {/* Progress Bar */}
+        <div className="mb-2">
           <input
             type="range"
             min="0"
@@ -228,8 +228,8 @@ export default function SongPage() {
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
-      {/* Volume Control */}
-      <div className="flex items-center gap-2">
+        {/* Volume Control */}
+        <div className="flex items-center gap-2">
           <FiVolume2 size={16} className="text-gray-500 dark:text-gray-400" />
           <input
             type="range"

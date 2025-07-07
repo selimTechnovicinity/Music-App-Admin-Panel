@@ -5,12 +5,11 @@ import { useUsers } from "@/hooks/useUsers";
 import API from "@/lib/axios-client";
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import {  useState } from "react";
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FiEye, FiEyeOff, FiSearch } from "react-icons/fi";
 
 const Users = () => {
-
   const [pageNo, setPageNo] = useState<number>(1);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const limit = 9;
@@ -27,8 +26,8 @@ const Users = () => {
     try {
       await API.post(`/users/hide/${userId}`);
       queryClient.invalidateQueries({
-      queryKey: ["users"],
-    });
+        queryKey: ["users"],
+      });
     } catch (error) {
       console.error("Failed to update song status:", error);
     }
@@ -126,9 +125,7 @@ const Users = () => {
                             <div className="flex-shrink-0 h-10 w-10">
                               <img
                                 className="h-10 w-10 rounded-full object-cover"
-                                src={
-                                  user?.photo || "/public/default-image.webp"
-                                }
+                                src={user?.photo || "/default-image.jpg"}
                                 alt=""
                               />
                             </div>

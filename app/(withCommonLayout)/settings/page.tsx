@@ -129,7 +129,7 @@ export default function SettingsPage() {
                 <div className="w-32 h-32 rounded-lg bg-gray-100 dark:bg-gray-700 overflow-hidden flex items-center justify-center">
                   {logoPreview ? (
                     <img
-                      src={logoPreview}
+                      src={logoPreview}   
                       alt="App Logo"
                       className="w-full h-full object-contain"
                     />

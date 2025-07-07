@@ -187,7 +187,7 @@ export default function SongsPage() {
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-md object-cover"
-                            src={song?.photo || "/public/default-image.webp"}
+                            src={song?.photo  || "/default-image.jpg"}
                             alt=""
                           />
                         </div>
@@ -206,8 +206,7 @@ export default function SongsPage() {
                           <img
                             className="h-10 w-10 rounded-full object-cover"
                             src={
-                              song?.userId?.photo ||
-                              "/public/default-image.webp"
+                              song?.userId?.photo  || "/default-image.jpg"
                             }
                             alt=""
                           />

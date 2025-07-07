@@ -143,7 +143,7 @@ export default function ProductsPage() {
                 src={
                   product?.images?.[0] ||
                   product?.photos?.[0] ||
-                  "https://via.placeholder.com/300"
+                  "/default-image.jpg"
                 }
                 alt={product?.title}
                 className="w-full h-full object-cover"
@@ -204,7 +204,7 @@ export default function ProductsPage() {
                     <div className="flex-shrink-0 h-10 w-10">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={product.userId.photo}
+                        src={product.userId.photo || "/default-image.jpg"}
                         alt=""
                       />
                     </div>

@@ -169,7 +169,7 @@ export default function AlbumsPage() {
               <Link href={`/users/edit/${selectedAlbum?.userId?._id}`}>
                 <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
                   <img
-                    src={selectedAlbum.userId.photo}
+                    src={selectedAlbum.userId.photo || "/default-image.jpg"}
                     alt={selectedAlbum.userId.name}
                     className="w-15 h-15 rounded-full mr-2"
                   />
@@ -191,7 +191,7 @@ export default function AlbumsPage() {
                 >
                   <div className="relative aspect-square">
                     <img
-                      src={song.photo}
+                      src={song.photo || "/default-image.jpg"}
                       alt={song.title}
                       className="w-full h-full object-cover"
                     />
@@ -230,7 +230,7 @@ export default function AlbumsPage() {
               >
                 <div className="relative aspect-square">
                   <img
-                    src={album.photo}
+                    src={album.photo || "/default-image.jpg"}
                     alt={album.title}
                     className="w-full h-full object-cover"
                   />
@@ -278,7 +278,7 @@ export default function AlbumsPage() {
 
                   <div className="flex items-center mt-2 text-gray-600 dark:text-gray-300">
                     <img
-                      src={album?.userId?.photo}
+                      src={album?.userId?.photo || "/default-image.jpg"}
                       alt=""
                       className="w-8 h-8 rounded-full mr-2"
                     />

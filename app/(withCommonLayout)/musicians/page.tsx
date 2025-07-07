@@ -157,9 +157,7 @@ const Users = () => {
                             <div className="flex-shrink-0 h-10 w-10">
                               <img
                                 className="h-10 w-10 rounded-full object-cover"
-                                src={
-                                  user?.photo || "/public/default-image.webp"
-                                }
+                                src={user?.photo || "/default-image.jpg"}
                                 alt=""
                               />
                             </div>

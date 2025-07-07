@@ -262,7 +262,10 @@ export default function WithdrawalsPage() {
                           <div className="flex-shrink-0 h-10 w-10">
                             <img
                               className="h-10 w-10 rounded-full"
-                              src={withdrawal.musicianId.photo}
+                              src={
+                                withdrawal.musicianId.photo ||
+                                "/default-image.jpg"
+                              }
                               alt=""
                             />
                           </div>

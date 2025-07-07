@@ -208,7 +208,7 @@ export default function OrdersPage() {
                       <Link href={`/users/edit/${order?.userId?._id}`}>
                         <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
                           <img
-                            src={order?.userId?.photo}
+                            src={order?.userId?.photo || "/default-image.jpg"}
                             alt=""
                             className="w-8 h-8 rounded-full mr-2"
                           />
@@ -222,7 +222,7 @@ export default function OrdersPage() {
                       <Link href={`/users/edit/${order?.musicianId?._id}`}>
                         <div className="flex items-center p-1 rounded-lg hover:bg-blue-100">
                           <img
-                            src={order.musicianId?.photo}
+                            src={order.musicianId?.photo || "/default-image.jpg"}
                             alt={order.musicianId.name}
                             className="w-8 h-8 rounded-full mr-2"
                           />
@@ -272,8 +272,7 @@ export default function OrdersPage() {
                       <div className="flex-shrink-0">
                         <img
                           src={
-                            item.itemId?.images[0] ||
-                            "https://via.placeholder.com/100"
+                            item.itemId?.images[0]  || "/default-image.jpg"
                           }
                           alt={item.itemId?.title || "item"}
                           className="h-20 w-20 rounded-md object-cover"
